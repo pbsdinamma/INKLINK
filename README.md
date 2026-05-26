@@ -102,38 +102,6 @@ CHAT:
   server  →  room:   chat:message { id, userId, username, userColor, message, timestamp }
 ```
 
----
-
-## 🌍 Environment Variables
-
-### `backend/.env`
-```
-PORT=3001
-CORS_ORIGIN=http://localhost:3000
-# REDIS_URL=redis://...  # Optional for multi-instance scaling
-```
-
-### `frontend/.env.local`
-```
-NEXT_PUBLIC_SOCKET_URL=http://localhost:3001
-```
-
----
-
-## 🚢 Deployment
-
-### Frontend → Vercel
-
-```bash
-cd frontend
-npx vercel --prod
-```
-
-Set env var on Vercel dashboard:
-```
-NEXT_PUBLIC_SOCKET_URL=https://your-backend.railway.app
-```
-
 ### Backend → Railway / Render
 
 1. Create a new **Node.js** service
