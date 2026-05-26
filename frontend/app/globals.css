@@ -2,6 +2,12 @@
 
 @theme {
   --font-sans: var(--font-nunito), "Nunito", sans-serif;
+  --color-brand-blue: #1e6bf1;
+  --color-brand-pink: #ff5c8a;
+  --color-brand-green: #00c853;
+  --color-brand-orange: #ff7e1b;
+  --color-brand-border: #13141f;
+  --color-brand-bg: #f0f4ff;
 }
 
 @layer base {
