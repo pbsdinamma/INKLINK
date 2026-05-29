@@ -1,4 +1,4 @@
-# 🎨 Sketchboard — Real-time Collaborative Whiteboard
+# 🎨 INKLINK — Real-time Collaborative Whiteboard
 
 A full-stack multiplayer whiteboard application built with Next.js, Socket.IO, and HTML5 Canvas. Draw together in real time with live cursor tracking, chat, and drawing replay.
 
