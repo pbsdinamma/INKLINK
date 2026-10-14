@@ -66,7 +66,7 @@ export default function RoomPage({ params }: RoomPageProps) {
   const redoRef = useRef<() => void>(() => {});
   const clearRef = useRef<() => void>(() => {});
   const downloadRef = useRef<() => void>(() => {});
-  const startReplayRef = useRef<() => void>(() => {});
+  const startReplayRef = useRef<() => boolean>(() => false);
   const stopReplayRef = useRef<() => void>(() => {});
 
   // ─── Room Sync Handlers ───────────────────────────────────
@@ -169,14 +169,12 @@ export default function RoomPage({ params }: RoomPageProps) {
       stopReplayRef.current();
       setIsReplaying(false);
     } else {
-      if (strokes.length === 0) {
-        toast("No drawings to replay yet!", { icon: "🎨" });
-        return;
+      const started = startReplayRef.current();
+      if (started) {
+        setIsReplaying(true);
       }
-      setIsReplaying(true);
-      startReplayRef.current();
     }
-  }, [isReplaying, strokes.length]);
+  }, [isReplaying]);
 
   const handleReplayEnd = useCallback(() => {
     setIsReplaying(false);
@@ -411,6 +409,7 @@ export default function RoomPage({ params }: RoomPageProps) {
             color={color}
             brushSize={brushSize}
             tool={tool}
+            onStrokesChange={setStrokes}
             onUndoRedoReady={(undo, redo) => {
               undoRef.current = undo;
               redoRef.current = redo;

@@ -110,7 +110,7 @@ export default function LandingPage() {
                   {/* Clean URL bar */}
                   <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-md px-3 py-0.5 text-[11px] font-mono text-slate-500 shadow-2xs">
                     <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                    <span>inklink.app/room/demo-room</span>
+                    <span>inklink.app/room/art-studio</span>
                   </div>
 
                   {/* Live status */}
@@ -123,7 +123,7 @@ export default function LandingPage() {
                 {/* Actual Product Screenshot */}
                 <div className="relative w-full aspect-[16/9] bg-slate-100 overflow-hidden">
                   <Image
-                    src="/demo-preview.png"
+                    src="/whiteboard-preview.png"
                     alt="InkLink Real-time Collaborative Whiteboard"
                     fill
                     priority

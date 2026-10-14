@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
+import toast from "react-hot-toast";
 import type { AppSocket } from "@/lib/socket";
 import type { Stroke, Tool } from "@/types";
 import { useCanvas } from "@/hooks/useCanvas";
@@ -19,8 +20,9 @@ interface CanvasProps {
   onUndoRedoReady: (undo: () => void, redo: () => void) => void;
   onClearReady: (clear: () => void) => void;
   onDownloadReady: (download: () => void) => void;
-  onReplayReady: (startReplay: () => void, stopReplay: () => void) => void;
+  onReplayReady: (startReplay: () => boolean, stopReplay: () => void) => void;
   onReplayEnd?: () => void;
+  onStrokesChange?: (strokes: Stroke[]) => void;
 }
 
 export function Canvas({
@@ -34,6 +36,7 @@ export function Canvas({
   onDownloadReady,
   onReplayReady,
   onReplayEnd,
+  onStrokesChange,
 }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -83,6 +86,7 @@ export function Canvas({
     brushSize,
     tool,
     onCursorMove: emitCursorMove,
+    onStrokesChange,
   });
 
   // Sync initial strokes into canvas
@@ -124,15 +128,16 @@ export function Canvas({
     }
   }, [strokes, onReplayEnd]);
 
-  const startReplay = useCallback(() => {
+  const startReplay = useCallback((): boolean => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return false;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) return false;
 
     if (strokes.length === 0) {
+      toast("No drawings to replay yet!", { icon: "🎨" });
       onReplayEnd?.();
-      return;
+      return false;
     }
 
     if (animFrameRef.current !== null) {
@@ -145,7 +150,8 @@ export function Canvas({
 
     let strokeIdx = 0;
     let pointIdx = 0;
-    const POINTS_PER_FRAME = 3;
+    const totalPoints = allStrokes.reduce((acc, s) => acc + s.points.length, 0);
+    const pointsPerFrame = Math.max(3, Math.ceil(totalPoints / 180));
 
     const replayFrame = () => {
       if (strokeIdx >= allStrokes.length) {
@@ -156,7 +162,7 @@ export function Canvas({
         return;
       }
       const stroke = allStrokes[strokeIdx];
-      const end = Math.min(pointIdx + POINTS_PER_FRAME, stroke.points.length);
+      const end = Math.min(pointIdx + pointsPerFrame, stroke.points.length);
       const partial: Stroke = { ...stroke, points: stroke.points.slice(0, end) };
 
       // Re-render all committed strokes up to this point
@@ -176,6 +182,7 @@ export function Canvas({
     };
 
     animFrameRef.current = requestAnimationFrame(replayFrame);
+    return true;
   }, [strokes, onReplayEnd]);
 
   useEffect(() => {

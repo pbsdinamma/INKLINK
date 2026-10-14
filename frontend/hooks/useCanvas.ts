@@ -14,6 +14,7 @@ interface UseCanvasOptions {
   brushSize: number;
   tool: Tool;
   onCursorMove?: (x: number, y: number) => void;
+  onStrokesChange?: (strokes: Stroke[]) => void;
 }
 
 /**
@@ -30,9 +31,14 @@ export function useCanvas({
   brushSize,
   tool,
   onCursorMove,
+  onStrokesChange,
 }: UseCanvasOptions) {
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const strokesRef = useRef<Stroke[]>([]);
+  const onStrokesChangeRef = useRef(onStrokesChange);
+  useEffect(() => {
+    onStrokesChangeRef.current = onStrokesChange;
+  }, [onStrokesChange]);
 
   // In-progress strokes (local + remote, keyed by strokeId)
   const activeStrokesRef = useRef<Map<string, Stroke>>(new Map());
@@ -157,6 +163,7 @@ export function useCanvas({
       const committed = [...strokesRef.current, currentStrokeRef.current];
       strokesRef.current = committed;
       setStrokes(committed);
+      onStrokesChangeRef.current?.(committed);
       socket?.emit("stroke:end", { strokeId });
       currentStrokeRef.current = null;
       isDrawingRef.current = false;
@@ -194,6 +201,7 @@ export function useCanvas({
       const committed = [...strokesRef.current, stroke];
       strokesRef.current = committed;
       setStrokes(committed);
+      onStrokesChangeRef.current?.(committed);
       dirtyRef.current = true;
     };
 
@@ -214,10 +222,12 @@ export function useCanvas({
   const redo = useCallback(() => socket?.emit("stroke:redo"), [socket]);
 
   const syncStrokes = useCallback((serverStrokes: Stroke[]) => {
+    if (strokesRef.current === serverStrokes) return;
     activeStrokesRef.current.clear();
     strokesRef.current = serverStrokes;
     setStrokes(serverStrokes);
     dirtyRef.current = true;
+    onStrokesChangeRef.current?.(serverStrokes);
 
     // Render synchronously immediately to guarantee instant visualization
     const canvas = canvasRef.current;
