@@ -27,6 +27,8 @@ import {
   WifiOff,
   Loader2,
   ChevronLeft,
+  Pencil,
+  Dices,
 } from "lucide-react";
 
 import { Toaster, toast } from "react-hot-toast";
@@ -249,29 +251,56 @@ export default function RoomPage({ params }: RoomPageProps) {
           className="relative w-full max-w-md text-center z-10"
         >
           <div className="skribbl-card bg-white p-8 relative overflow-hidden text-center shadow-[0_8px_0px_#13141f]">
+            {/* Consistent Brand Pencil Icon */}
+            <div className="w-12 h-12 bg-brand-blue rounded-2xl flex items-center justify-center text-white shadow-[0_3px_0px_#13141f] border-2 border-brand-border mx-auto mb-4">
+              <Pencil className="w-6 h-6" />
+            </div>
+
             <h2 className="text-2xl font-black mb-1 text-brand-border select-none">
-              Welcome to InkLink!
+              Welcome to Ink<span className="text-brand-blue">Link</span>!
             </h2>
-            <p className="text-brand-border/50 text-xs font-black mb-6 select-none leading-relaxed">
-              To join this collaborative canvas, please choose a nickname.
+            <p className="text-brand-border/60 text-xs font-bold mb-6 select-none leading-relaxed">
+              You&apos;ve been invited to room <span className="font-mono font-black text-brand-blue uppercase px-1.5 py-0.5 bg-brand-blue/10 rounded-lg">{roomId}</span>. Choose a nickname to start sketching!
             </p>
             <form onSubmit={handleNameSubmit} className="space-y-4">
-              <input
-                type="text"
-                value={nameInput}
-                onChange={(e) => setNameInput(e.target.value)}
-                placeholder="Enter your name..."
-                maxLength={20}
-                className="w-full bg-white border-3 border-[#13141f] rounded-2xl px-4 py-3.5 text-sm font-black text-[#13141f] placeholder-[#13141f]/35 focus:outline-none focus:border-[#1e6bf1]"
-                autoFocus
-              />
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-black text-brand-border text-left">
+                    Your Nickname
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const names = [
+                        "InkyPanda", "ArtWhiz", "SketchFox", "DoodleKing",
+                        "PixelNinja", "ColorSage", "BrushMaster", "NeonOtter"
+                      ];
+                      setNameInput(names[Math.floor(Math.random() * names.length)]);
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-black text-brand-blue hover:text-brand-blue/80 transition-colors cursor-pointer"
+                  >
+                    <Dices className="w-3.5 h-3.5" />
+                    <span>Random</span>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  placeholder="e.g. InkyPanda..."
+                  maxLength={20}
+                  className="w-full bg-[#fbfcfe] border-2 border-brand-border/30 focus:bg-white focus:border-brand-blue rounded-xl px-4 py-3 text-sm font-black text-[#13141f] placeholder:text-brand-border/30 focus:outline-none transition-all"
+                  autoFocus
+                />
+              </div>
+
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full bg-[#ff7e1b] text-white font-black py-4 border-3 border-[#13141f] rounded-2xl flex items-center justify-center gap-2 hover:bg-[#ff7e1b]/95 shadow-[0_5px_0px_#13141f] cursor-pointer"
+                className="w-full bg-brand-blue text-white font-black py-3.5 border-3 border-brand-border rounded-2xl flex items-center justify-center gap-2 hover:bg-brand-blue/95 shadow-[0_4px_0px_#13141f] cursor-pointer active:translate-y-0.5 active:shadow-[0_1px_0px_#13141f] transition-all"
               >
-                Join Room
+                Join Room & Start Drawing
               </motion.button>
             </form>
           </div>
@@ -309,20 +338,19 @@ export default function RoomPage({ params }: RoomPageProps) {
         {/* Left: Brand logo + Copy invite link */}
         <div className="flex items-center gap-4">
           <motion.button
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => router.push("/")}
-            className="flex items-center justify-center w-8 h-8 rounded-xl border-2 border-brand-border hover:bg-brand-bg select-none transition-colors cursor-pointer"
-            title="Leave Room"
+            className="flex items-center gap-2.5 cursor-pointer group select-none"
+            title="Leave Room & Back to Home"
           >
-            <ChevronLeft className="w-4 h-4" />
-          </motion.button>
-
-          <div className="hidden sm:flex items-center gap-2">
-            <span className="text-sm font-black text-brand-border select-none">
+            <div className="w-8 h-8 bg-brand-blue rounded-xl flex items-center justify-center text-white shadow-[0_2px_0px_#13141f] border-2 border-brand-border">
+              <Pencil className="w-4 h-4" />
+            </div>
+            <span className="hidden sm:inline text-base font-black text-brand-border select-none">
               Ink<span className="text-brand-blue">Link</span>
             </span>
-          </div>
+          </motion.button>
 
           <motion.button
             whileHover={{ scale: 1.04, y: -1 }}
