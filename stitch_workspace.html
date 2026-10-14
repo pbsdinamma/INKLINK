@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>InkLink - Q3 Product Ideation &amp; Brainstorm 💡</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Caveat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#dcd9dd",
+            "surface-container": "#f0edf1",
+            "on-tertiary-fixed": "#002113",
+            "outline-variant": "#c7c4d7",
+            "on-tertiary-fixed-variant": "#005236",
+            "surface-tint": "#494bd6",
+            "surface-container-low": "#f6f2f7",
+            "outline": "#767586",
+            "secondary-container": "#ff6b6b",
+            "primary-fixed-dim": "#c0c1ff",
+            "on-primary": "#ffffff",
+            "on-background": "#1b1b1e",
+            "secondary-fixed": "#ffdad8",
+            "tertiary": "#006c49",
+            "on-primary-container": "#fffbff",
+            "primary-fixed": "#e1e0ff",
+            "on-primary-fixed": "#07006c",
+            "on-surface-variant": "#464554",
+            "surface-variant": "#e4e1e6",
+            "tertiary-fixed": "#6ffbbe",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "surface": "#fbf8fc",
+            "surface-container-highest": "#e4e1e6",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#ffb3b0",
+            "on-tertiary-container": "#000703",
+            "on-secondary-fixed": "#410006",
+            "secondary": "#ae2f34",
+            "on-error": "#ffffff",
+            "background": "#fbf8fc",
+            "primary-container": "#6063ee",
+            "inverse-primary": "#c0c1ff",
+            "on-secondary-fixed-variant": "#8c1520",
+            "inverse-surface": "#303033",
+            "on-primary-fixed-variant": "#2f2ebe",
+            "inverse-on-surface": "#f3f0f4",
+            "primary": "#4648d4",
+            "on-error-container": "#93000a",
+            "on-surface": "#1b1b1e",
+            "on-secondary": "#ffffff",
+            "surface-container-high": "#eae7eb",
+            "tertiary-fixed-dim": "#4edea3",
+            "error": "#ba1a1a",
+            "surface-bright": "#fbf8fc",
+            "tertiary-container": "#00885d"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "margin-sm": "0.75rem",
+            "gutter": "1rem",
+            "margin-lg": "2rem",
+            "gutter-lg": "1.5rem",
+            "space-lg": "1.25rem",
+            "gutter-sm": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "margin": "1rem"
+          },
+          fontFamily: {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "handwriting": ["Caveat", "cursive"]
+          },
+          fontSize: {
+            "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "800" }],
+            "label-sm": ["10px", { lineHeight: "12px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }],
+            "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }],
+            "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }],
+            "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.005em", fontWeight: "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Subtle dot grid pattern */
+    .bg-dot-matrix {
+      background-color: #faf9fb;
+      background-image: radial-gradient(#d3cfd8 1.15px, transparent 1.15px);
+      background-size: 20px 20px;
+    }
+
+    /* Hand-drawn look */
+    .hand-sketch {
+      font-family: 'Caveat', cursive;
+    }
+
+    /* Custom scrollbar for chat panel */
+    .chat-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .chat-scroll::-webkit-scrollbar-thumb {
+      background-color: #e4e1e6;
+      border-radius: 9999px;
+    }
+
+    /* Cursors animation float */
+    @keyframes gentlePulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .animate-float-slow {
+      animation: gentlePulse 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="h-full w-full overflow-hidden select-none bg-surface text-on-surface antialiased font-body-md">
+<!-- ================= CANVAS BASE (LEVEL 0) ================= -->
+<main class="relative w-full h-full bg-dot-matrix overflow-hidden cursor-default" id="infinite-canvas">
+<!-- Ambient Grid & Metric Subdivisions SVG Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="100" id="grid-major" patternunits="userSpaceOnUse" width="100">
+<path d="M 100 0 L 0 0 0 100" fill="none" stroke="#e0dbe3" stroke-dasharray="2 3" stroke-width="0.8"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid-major)" height="100%" width="100%"></rect>
+</svg>
+<!-- Connectors Layer (Curved Flow Lines) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+<!-- Marker definitions -->
+<defs>
+<marker id="arrow-primary" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="6" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4648d4"></path>
+</marker>
+<marker id="arrow-tertiary" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="6" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#006c49"></path>
+</marker>
+<marker id="arrow-secondary" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="6" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ae2f34"></path>
+</marker>
+</defs>
+<!-- Curve 1: Sticky 1 to Wireframe Card -->
+<path d="M 390 280 C 470 290, 480 340, 530 360" fill="none" marker-end="url(#arrow-primary)" opacity="0.85" stroke="#4648d4" stroke-dasharray="6 4" stroke-width="2.5"></path>
+<!-- Curve 2: Sticky 2 to Sticky 4 -->
+<path d="M 720 220 C 790 190, 830 200, 890 240" fill="none" marker-end="url(#arrow-tertiary)" opacity="0.8" stroke="#006c49" stroke-width="2.5"></path>
+<!-- Curve 3: Wireframe to Beta target -->
+<path d="M 710 490 C 780 520, 820 460, 860 480" fill="none" marker-end="url(#arrow-secondary)" opacity="0.85" stroke="#ae2f34" stroke-dasharray="4 4" stroke-width="2.5"></path>
+</svg>
+<!-- Vector Hand Sketches & Doodles -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+<!-- Lightbulb Doodle above AI idea note -->
+<g transform="translate(620, 110)">
+<path d="M 25 35 C 10 30, 8 10, 25 5 C 42 10, 40 30, 25 35 Z" fill="none" stroke="#f59e0b" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M 20 38 L 30 38 M 22 42 L 28 42" stroke="#d97706" stroke-linecap="round" stroke-width="2"></path>
+<path d="M 25 0 L 25 -8 M 40 10 L 48 4 M 10 10 L 2 4 M 43 25 L 51 28 M 7 25 L -1 28" stroke="#f59e0b" stroke-linecap="round" stroke-width="2"></path>
+</g>
+<!-- Star burst highlight -->
+<g transform="translate(870, 150)">
+<path d="M 20 0 L 24 14 L 38 18 L 26 26 L 28 40 L 18 30 L 4 36 L 10 22 L 0 14 L 14 12 Z" fill="#fef08a" opacity="0.9" stroke="#ca8a04" stroke-width="1.8"></path>
+</g>
+<!-- Hand-drawn Smiley Stamp -->
+<g transform="translate(370, 480) rotate(-10)">
+<circle cx="20" cy="20" fill="#fef9c3" r="16" stroke="#eab308" stroke-width="2"></circle>
+<circle cx="15" cy="16" fill="#a16207" r="1.8"></circle>
+<circle cx="25" cy="16" fill="#a16207" r="1.8"></circle>
+<path d="M 14 23 Q 20 29 26 23" fill="none" stroke="#a16207" stroke-linecap="round" stroke-width="2"></path>
+</g>
+</svg>
+<!-- ================= WHITEBOARD ARTIFACTS / CONTENT ================= -->
+<!-- Section Frame Card: Discovery & Problem Space -->
+<div class="absolute left-40 top-32 w-[340px] rounded-xl border border-dashed border-outline/50 bg-surface-container-lowest/40 backdrop-blur-xs p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-outline-variant/30">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Frame 1: Pain Points
+        </span>
+<span class="text-outline text-label-sm font-label-sm">Updated 10m ago</span>
+</div>
+<!-- Sticky Note 1: Lemon Yellow (Tilted) -->
+<div class="relative bg-[#fef9c3] text-[#713f12] p-4 rounded-lg shadow-md border border-[#fef08a] transform -rotate-2 hover:rotate-0 hover:scale-102 transition-transform duration-200 cursor-grab">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-[#a16207]">Friction Point</span>
+<span class="material-symbols-outlined text-sm text-[#ca8a04]">push_pin</span>
+</div>
+<p class="font-body-md text-body-md font-medium leading-snug">
+          User onboarding drop-off: <strong class="underline decoration-[#eab308] decoration-2">Step 3 is confusing</strong>. Too many mandatory fields before seeing the live workspace canvas!
+        </p>
+<div class="mt-4 pt-2 border-t border-[#fef08a] flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-full bg-amber-400 text-[10px] text-white flex items-center justify-center font-bold">AK</span>
+<span class="font-label-sm text-label-sm text-[#854d0e]">Alex (Design)</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-[#a16207] font-semibold">
+<span>👍 5</span>
+<span>💬 2</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Note 2: Pastel Blush Coral (AI Idea) -->
+<div class="absolute left-[540px] top-40 w-64 bg-[#ffe4e6] text-[#881337] p-4 rounded-lg shadow-md border border-[#fecdd3] transform rotate-3 hover:rotate-0 transition-transform duration-200 cursor-grab z-10">
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[#be123c]">
+<span class="material-symbols-outlined text-xs">auto_awesome</span> New Feat
+        </span>
+<span class="w-2 h-2 rounded-full bg-[#fb7185] animate-ping"></span>
+</div>
+<p class="font-body-md text-body-md font-medium leading-relaxed">
+        Idea: <strong>AI-assisted diagram generation</strong> from raw user prompt (e.g. "@flow create user checkout funnel").
+      </p>
+<div class="mt-4 pt-2 border-t border-[#fecdd3] flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-full bg-rose-500 text-[10px] text-white flex items-center justify-center font-bold">SC</span>
+<span class="font-label-sm text-label-sm text-[#9f1239]">Sarah Chen</span>
+</div>
+<span class="text-xs bg-[#f43f5e]/15 text-[#be123c] px-1.5 py-0.5 rounded font-bold">P0 High</span>
+</div>
+</div>
+<!-- Wireframe Card (Flow Prototype) -->
+<div class="absolute left-[500px] top-[340px] w-72 rounded-xl bg-surface-container-lowest border border-outline-variant/60 shadow-lg p-4 z-10 hover:shadow-xl transition-shadow">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-base">web</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">Simplified Modal Wireframe</span>
+</div>
+<span class="text-xs text-outline font-mono">v0.3</span>
+</div>
+<!-- Mini Mockup Wireframe -->
+<div class="bg-surface-container-low rounded-lg p-3 border border-outline-variant/40 space-y-2">
+<div class="h-3 w-2/3 bg-outline-variant/60 rounded"></div>
+<div class="h-8 w-full bg-surface-container-lowest rounded border border-outline-variant/50 flex items-center px-2">
+<div class="h-2 w-1/3 bg-outline-variant/40 rounded"></div>
+</div>
+<div class="flex gap-2 pt-1">
+<div class="h-6 flex-1 bg-primary rounded flex items-center justify-center text-[10px] text-white font-semibold">One-Click Google</div>
+<div class="h-6 w-14 bg-surface-container-high rounded flex items-center justify-center text-[10px] text-outline">Skip</div>
+</div>
+</div>
+<div class="mt-3 flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span class="hand-sketch text-base text-primary font-bold">"Cut steps down to 1"</span>
+<span class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs">visibility</span> 3 reviews
+        </span>
+</div>
+</div>
+<!-- Sticky Note 3: Lavender Purple (Personas) -->
+<div class="absolute left-[890px] top-44 w-60 bg-[#f3e8ff] text-[#581c87] p-4 rounded-lg shadow-md border border-[#e9d5ff] transform -rotate-1 hover:rotate-0 transition-transform duration-200 cursor-grab z-10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-[#7e22ce]">Target Persona</span>
+<span class="material-symbols-outlined text-sm text-[#9333ea]">group</span>
+</div>
+<p class="font-body-md text-body-md font-medium">
+        User persona: <strong>Indie founders &amp; design leads</strong> needing instant frictionless brain dumps without complex setup.
+      </p>
+<div class="mt-4 pt-2 border-t border-[#e9d5ff] flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-full bg-purple-600 text-[10px] text-white flex items-center justify-center font-bold">DK</span>
+<span class="font-label-sm text-label-sm text-[#6b21a8]">David K.</span>
+</div>
+<span class="text-[11px] text-purple-700 font-semibold">Priority 1</span>
+</div>
+</div>
+<!-- Sticky Note 4: Mint Green (Launch Target) -->
+<div class="absolute left-[840px] top-[430px] w-64 bg-[#dcfce7] text-[#14532d] p-4 rounded-lg shadow-md border border-[#bbf7d0] transform rotate-2 hover:rotate-0 transition-transform duration-200 cursor-grab z-10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-[#15803d]">Milestone</span>
+<span class="material-symbols-outlined text-sm text-[#16a34a]">flag</span>
+</div>
+<p class="font-body-md text-body-md font-bold text-base leading-snug">
+        🚀 Target: launch public beta by July 15!
+      </p>
+<p class="text-xs text-[#166534] mt-1 font-body-sm">
+        All API contracts frozen by June 28.
+      </p>
+<div class="mt-4 pt-2 border-t border-[#bbf7d0] flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-5 rounded-full bg-emerald-600 text-[10px] text-white flex items-center justify-center font-bold">MR</span>
+<span class="font-label-sm text-label-sm text-[#15803d]">Maya R.</span>
+</div>
+<span class="bg-[#15803d]/15 text-[#14532d] px-2 py-0.5 rounded-full text-[10px] font-bold">Locked 🔒</span>
+</div>
+</div>
+<!-- ================= MULTIPLAYER LIVE CURSORS (LEVEL 4) ================= -->
+<!-- Collaborator 1: Alex (Indigo) -->
+<div class="absolute left-[440px] top-[260px] pointer-events-none z-30 transition-all duration-300 ease-out">
+<!-- Cursor Pointer SVG -->
+<svg class="w-5 h-5 text-primary drop-shadow-sm" fill="currentColor" viewbox="0 0 24 24">
+<path d="M4.5 2.5L20 11.5L12 14.5L8.5 21.5L4.5 2.5Z"></path>
+</svg>
+<!-- Label Chip -->
+<div class="inline-flex items-center gap-1.5 bg-primary text-white px-2 py-0.5 rounded-full shadow-md ml-3 -mt-1">
+<span class="font-label-sm text-label-sm font-semibold tracking-normal">Alex (Design) - dragging sticky note</span>
+</div>
+</div>
+<!-- Collaborator 2: Sarah Chen (Coral) -->
+<div class="absolute left-[640px] top-[320px] pointer-events-none z-30 transition-all duration-300 ease-out">
+<svg class="w-5 h-5 text-[#ff6b6b] drop-shadow-sm" fill="currentColor" viewbox="0 0 24 24">
+<path d="M4.5 2.5L20 11.5L12 14.5L8.5 21.5L4.5 2.5Z"></path>
+</svg>
+<div class="inline-flex items-center gap-1 bg-[#ff6b6b] text-white px-2 py-0.5 rounded-full shadow-md ml-3 -mt-1 animate-pulse">
+<span class="font-label-sm text-label-sm font-semibold">Sarah Chen - typing...</span>
+</div>
+</div>
+<!-- Collaborator 3: Maya R. (Emerald) -->
+<div class="absolute left-[780px] top-[450px] pointer-events-none z-30 transition-all duration-300 ease-out">
+<svg class="w-5 h-5 text-tertiary drop-shadow-sm" fill="currentColor" viewbox="0 0 24 24">
+<path d="M4.5 2.5L20 11.5L12 14.5L8.5 21.5L4.5 2.5Z"></path>
+</svg>
+<div class="inline-flex items-center gap-1 bg-tertiary text-white px-2 py-0.5 rounded-full shadow-md ml-3 -mt-1">
+<span class="font-label-sm text-label-sm font-semibold">Maya R. - drawing arrow</span>
+</div>
+</div>
+<!-- Collaborator 4: David K. (Cyan with Reaction Bubble) -->
+<div class="absolute left-[920px] top-[210px] pointer-events-none z-30 animate-float-slow">
+<svg class="w-5 h-5 text-sky-500 drop-shadow-sm" fill="currentColor" viewbox="0 0 24 24">
+<path d="M4.5 2.5L20 11.5L12 14.5L8.5 21.5L4.5 2.5Z"></path>
+</svg>
+<!-- Reaction Speech Bubble -->
+<div class="relative bg-surface-container-lowest text-on-surface border border-outline-variant/60 px-3 py-1.5 rounded-2xl shadow-xl ml-4 -mt-2">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm font-bold text-sky-600">David K.</span>
+<span class="font-body-sm text-body-sm font-medium">🔥 Love this idea!</span>
+</div>
+</div>
+</div>
+</main>
+<!-- ================= TOP FLOATING NAVIGATION BAR ================= -->
+<!-- Shared Component 1: TopNavBar Execution -->
+<header class="fixed top-4 left-4 right-4 rounded-xl z-50 bg-surface-container-lowest/85 dark:bg-surface/85 backdrop-blur-md border border-outline-variant/40 dark:border-outline/40 shadow-md">
+<div class="flex justify-between items-center w-full px-4 py-2.5">
+<!-- Brand & Document Breadcrumbs -->
+<div class="flex items-center gap-3">
+<!-- Logo / Quill Icon -->
+<div class="flex items-center gap-2 pr-3 border-r border-outline-variant/40">
+<div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-lg" data-icon="draw">draw</span>
+</div>
+<span class="text-headline-sm font-headline-sm font-extrabold text-primary dark:text-inverse-primary tracking-tight">InkLink</span>
+</div>
+<!-- Breadcrumbs & Document Title -->
+<nav class="flex items-center gap-2 text-label-md font-label-md">
+<span class="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer">Workspace</span>
+<span class="text-outline">/</span>
+<span class="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer">Product Team</span>
+<span class="text-outline">/</span>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container-high/60">
+<span class="text-on-surface dark:text-inverse-on-surface font-semibold">Q3 Product Ideation &amp; Brainstorm 💡</span>
+<span class="material-symbols-outlined text-outline text-sm cursor-pointer hover:text-on-surface">edit</span>
+</div>
+</nav>
+<!-- Cloud Sync Badge -->
+<div class="flex items-center gap-1 pl-2 text-tertiary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-base" data-icon="cloud_done">cloud_done</span>
+<span>Saved to Cloud</span>
+</div>
+</div>
+<!-- Center History Undo/Redo & Zoom Quick Actions -->
+<div class="hidden lg:flex items-center gap-1 bg-surface-container-low px-2 py-1 rounded-lg border border-outline-variant/30">
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Undo (Ctrl+Z)">
+<span class="material-symbols-outlined text-lg" data-icon="undo">undo</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Redo (Ctrl+Y)">
+<span class="material-symbols-outlined text-lg" data-icon="redo">redo</span>
+</button>
+<span class="w-px h-4 bg-outline-variant/40 mx-1"></span>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Zoom In">
+<span class="material-symbols-outlined text-lg" data-icon="zoom_in">zoom_in</span>
+</button>
+<span class="font-mono text-xs px-1 text-on-surface font-medium">100%</span>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Zoom Out">
+<span class="material-symbols-outlined text-lg" data-icon="zoom_out">zoom_out</span>
+</button>
+</div>
+<!-- Trailing Action Cluster & Multiplayer Stack -->
+<div class="flex items-center gap-3">
+<!-- Live Collaborators Avatar Pile -->
+<div class="flex items-center -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-indigo-500 text-white flex items-center justify-center font-bold text-xs ring-2 ring-primary" title="Alex (Design)">AK</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-rose-500 text-white flex items-center justify-center font-bold text-xs ring-2 ring-[#ff6b6b]" title="Sarah Chen">SC</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-emerald-500 text-white flex items-center justify-center font-bold text-xs ring-2 ring-tertiary" title="Maya R.">MR</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-sky-500 text-white flex items-center justify-center font-bold text-xs ring-2 ring-sky-400" title="David K.">DK</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-highest text-on-surface font-semibold text-xs flex items-center justify-center shadow-xs cursor-pointer hover:bg-surface-dim">
+            +3
+          </div>
+</div>
+<!-- Secondary Action: Export -->
+<button class="px-3.5 py-1.5 rounded-lg border border-outline-variant/50 text-on-surface hover:bg-surface-container-high dark:hover:bg-inverse-surface transition-colors duration-150 font-label-md text-label-md font-semibold active:scale-95 flex items-center gap-1.5 shadow-xs">
+<span class="material-symbols-outlined text-base">download</span>
+<span>Export</span>
+</button>
+<!-- Primary Action: Share -->
+<button class="px-4 py-1.5 rounded-lg bg-primary text-white hover:bg-[#3d3fba] transition-all duration-150 font-label-md text-label-md font-semibold active:scale-95 flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="lock">lock</span>
+<span>Share</span>
+</button>
+</div>
+</div>
+</header>
+<!-- ================= FLOATING BOTTOM TOOLBAR (CANVAS CREATION ENGINE) ================= -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3">
+<!-- Main Drawing Tools Capsule -->
+<nav aria-label="Whiteboard Drawing Tools" class="flex items-center gap-1 p-1.5 rounded-2xl bg-surface-container-lowest/85 backdrop-blur-md border border-outline-variant/40 shadow-xl">
+<!-- Select / Pointer (ACTIVE) -->
+<button class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary transition-transform active:scale-95 group" title="Select (V)">
+<span class="material-symbols-outlined text-xl" data-icon="near_me">near_me</span>
+<span class="absolute bottom-1 w-1 h-1 rounded-full bg-primary"></span>
+</button>
+<!-- Pan / Hand -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Hand / Pan (H)">
+<span class="material-symbols-outlined text-xl" data-icon="pan_tool">pan_tool</span>
+</button>
+<span class="w-px h-6 bg-outline-variant/40 mx-0.5"></span>
+<!-- Pen / Brush -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Pen (P)">
+<span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
+</button>
+<!-- Highlighter -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Highlighter">
+<span class="material-symbols-outlined text-xl" data-icon="ink_highlighter">ink_highlighter</span>
+</button>
+<!-- Sticky Note with Color Flyout Preview Indicator -->
+<div class="relative group">
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Sticky Note (S)">
+<span class="material-symbols-outlined text-xl text-amber-500" data-icon="sticky_note_2">sticky_note_2</span>
+</button>
+<!-- Mini Color Badge Dropdown Anchor -->
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#fef08a] border border-amber-400"></span>
+</div>
+<!-- Shapes Picker -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Shapes (R)">
+<span class="material-symbols-outlined text-xl" data-icon="shapes">shapes</span>
+</button>
+<!-- Text Tool -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Text (T)">
+<span class="material-symbols-outlined text-xl" data-icon="title">title</span>
+</button>
+<!-- Frame / Section Tool -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Frame (F)">
+<span class="material-symbols-outlined text-xl" data-icon="crop_free">crop_free</span>
+</button>
+<span class="w-px h-6 bg-outline-variant/40 mx-0.5"></span>
+<!-- Eraser -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-95" title="Eraser (E)">
+<span class="material-symbols-outlined text-xl" data-icon="ink_eraser">ink_eraser</span>
+</button>
+<!-- Laser Pointer -->
+<button class="flex items-center justify-center w-10 h-10 rounded-xl text-rose-500 hover:bg-rose-50 transition-all active:scale-95" title="Laser Pointer (L)">
+<span class="material-symbols-outlined text-xl" data-icon="auto_awesome">auto_awesome</span>
+</button>
+</nav>
+<!-- Quick Properties & Swatches Floating Pill -->
+<div class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-2xl bg-surface-container-lowest/85 backdrop-blur-md border border-outline-variant/40 shadow-xl">
+<!-- Color Palette Swatches -->
+<div class="flex items-center gap-1.5">
+<button class="w-5 h-5 rounded-full bg-slate-900 ring-2 ring-offset-2 ring-primary transition-transform scale-110" title="Jet Black"></button>
+<button class="w-5 h-5 rounded-full bg-[#6366f1] hover:scale-110 transition-transform" title="Electric Indigo"></button>
+<button class="w-5 h-5 rounded-full bg-[#ff6b6b] hover:scale-110 transition-transform" title="Sunset Coral"></button>
+<button class="w-5 h-5 rounded-full bg-[#10b981] hover:scale-110 transition-transform" title="Mint Emerald"></button>
+<button class="w-5 h-5 rounded-full bg-[#f59e0b] hover:scale-110 transition-transform" title="Amber Gold"></button>
+<button class="w-5 h-5 rounded-full bg-[#0ea5e9] hover:scale-110 transition-transform" title="Sky Blue"></button>
+</div>
+<span class="w-px h-4 bg-outline-variant/40 mx-1"></span>
+<!-- Stroke Thickness Selector -->
+<div class="flex items-center gap-1">
+<button class="w-6 h-6 rounded flex items-center justify-center hover:bg-surface-container-high" title="Thin">
+<span class="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+</button>
+<button class="w-6 h-6 rounded bg-surface-container-high flex items-center justify-center" title="Medium (Active)">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+</button>
+<button class="w-6 h-6 rounded flex items-center justify-center hover:bg-surface-container-high" title="Bold">
+<span class="w-3.5 h-3.5 rounded-full bg-on-surface"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- ================= BOTTOM-LEFT MINI-MAP & WORKSPACE CONTROLS ================= -->
+<div class="fixed bottom-6 left-6 z-40 flex flex-col gap-2">
+<!-- Mini-Map Thumbnail Panel -->
+<div class="w-48 h-32 rounded-xl bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/50 shadow-lg p-2 flex flex-col justify-between">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-bold">Mini-map</span>
+<button class="hover:text-on-surface" title="Expand View">
+<span class="material-symbols-outlined text-sm">fullscreen</span>
+</button>
+</div>
+<!-- Canvas Schematic Representation -->
+<div class="relative w-full h-20 bg-surface-container-low rounded border border-outline-variant/30 overflow-hidden">
+<!-- Dot artifacts on mini-map -->
+<span class="absolute left-6 top-4 w-4 h-3 bg-amber-300 rounded-[1px] opacity-80"></span>
+<span class="absolute left-14 top-5 w-4 h-3 bg-rose-300 rounded-[1px] opacity-80"></span>
+<span class="absolute left-13 top-10 w-6 h-5 bg-indigo-300 rounded-[1px] opacity-80"></span>
+<span class="absolute left-24 top-6 w-4 h-3 bg-purple-300 rounded-[1px] opacity-80"></span>
+<span class="absolute left-22 top-11 w-5 h-3 bg-emerald-300 rounded-[1px] opacity-80"></span>
+<!-- Viewport bounding box -->
+<div class="absolute inset-x-3 inset-y-1 border-2 border-primary/70 bg-primary/10 rounded-[2px] cursor-move"></div>
+</div>
+</div>
+<!-- Quick Zoom & Grid Toggles Dock -->
+<div class="flex items-center gap-1.5 p-1 rounded-xl bg-surface-container-lowest/85 backdrop-blur-md border border-outline-variant/40 shadow-md self-start font-label-md text-label-md">
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Zoom Out (-)">
+<span class="material-symbols-outlined text-base">remove</span>
+</button>
+<span class="px-2 font-mono text-xs font-semibold text-on-surface">100%</span>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Zoom In (+)">
+<span class="material-symbols-outlined text-base">add</span>
+</button>
+<span class="w-px h-3 bg-outline-variant/40 mx-0.5"></span>
+<button class="p-1 rounded text-primary hover:bg-surface-container-high transition-colors" title="Toggle Grid Mode">
+<span class="material-symbols-outlined text-base">grid_4x4</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Fit to Screen">
+<span class="material-symbols-outlined text-base">fit_screen</span>
+</button>
+</div>
+</div>
+<!-- ================= RIGHT FLOATING COLLABORATION DOCK ================= -->
+<!-- Shared Component 2: SideNavBar Execution -->
+<aside class="fixed top-20 right-4 bottom-4 w-80 rounded-xl z-40 bg-surface-container-lowest/90 dark:bg-surface/90 backdrop-blur-md border border-outline-variant/40 dark:border-outline/40 shadow-xl flex flex-col justify-between h-[calc(100vh-6rem)] p-4">
+<!-- Header with Huddle Voice Quick Access -->
+<div>
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant/30">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center font-bold shadow-xs">
+<span class="material-symbols-outlined text-lg" data-icon="groups">groups</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm font-bold text-on-surface leading-tight">Room Collaboration</h2>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-tertiary font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+<span>6 online now</span>
+</div>
+</div>
+</div>
+<!-- Join Voice Button -->
+<button class="px-2.5 py-1 rounded-lg bg-tertiary-container/15 hover:bg-tertiary-container/25 text-tertiary font-label-sm text-label-sm font-bold transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">mic</span>
+<span>Huddle</span>
+</button>
+</div>
+<!-- Navigation Tabs (Chat active) -->
+<nav class="grid grid-cols-4 gap-1 mt-3 bg-surface-container-low p-1 rounded-lg">
+<button class="bg-primary/10 dark:bg-primary-container/20 text-primary dark:text-inverse-primary font-semibold rounded-lg py-1 text-center font-label-sm text-label-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="chat_bubble">chat_bubble</span>
+<span>Chat</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg py-1 text-center font-label-sm text-label-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="mood">mood</span>
+<span>Reactions</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg py-1 text-center font-label-sm text-label-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="history">history</span>
+<span>Activity</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg py-1 text-center font-label-sm text-label-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="manage_accounts">manage_accounts</span>
+<span>Permissions</span>
+</button>
+</nav>
+</div>
+<!-- Chat Messages Feed (Scrollable) -->
+<div class="flex-1 overflow-y-auto chat-scroll py-3 space-y-3.5 my-2">
+<!-- Message 1: Alex -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">AK</div>
+<div class="flex-1">
+<div class="flex items-baseline justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Alex</span>
+<span class="text-[10px] text-outline">10:42 AM</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2.5 mt-1 border border-outline-variant/30 text-body-sm font-body-sm text-on-surface">
+            I just pinned the UX onboarding feedback sticky in yellow! Notice step 3 friction.
+          </div>
+</div>
+</div>
+<!-- Message 2: Sarah (Thread reply) -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">SC</div>
+<div class="flex-1">
+<div class="flex items-baseline justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Sarah Chen</span>
+<span class="text-[10px] text-outline">10:44 AM</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2.5 mt-1 border border-outline-variant/30 text-body-sm font-body-sm text-on-surface">
+            Totally agree. Created an AI prompt flow concept next to it. Let's run a test user interview!
+          </div>
+<!-- Reaction pill -->
+<div class="flex items-center gap-1 mt-1">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-surface-container text-[11px] font-medium border border-outline-variant/30 cursor-pointer">
+              👏 3
+            </span>
+</div>
+</div>
+</div>
+<!-- Message 3: Maya R. -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">MR</div>
+<div class="flex-1">
+<div class="flex items-baseline justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Maya R.</span>
+<span class="text-[10px] text-outline">10:47 AM</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2.5 mt-1 border border-outline-variant/30 text-body-sm font-body-sm text-on-surface">
+<span class="text-primary font-semibold">@canvas</span> I've updated the Beta milestone card. Let's finalize scope today.
+          </div>
+</div>
+</div>
+</div>
+<!-- Chat Footer Input & Settings CTA -->
+<div class="pt-2 border-t border-outline-variant/30 space-y-2.5">
+<!-- Chat Composer -->
+<div class="relative bg-surface-container-lowest rounded-xl border border-outline-variant/60 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all p-2 shadow-xs">
+<textarea class="w-full bg-transparent border-0 p-0 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:ring-0 resize-none" placeholder="Type message or '@canvas'..." rows="2"></textarea>
+<div class="flex items-center justify-between pt-1 text-outline">
+<div class="flex items-center gap-1">
+<button class="p-1 hover:text-primary transition-colors" title="Add Emoji">
+<span class="material-symbols-outlined text-base">mood</span>
+</button>
+<button class="p-1 hover:text-primary transition-colors" title="Mention Board Item">
+<span class="material-symbols-outlined text-base">alternate_email</span>
+</button>
+<button class="p-1 hover:text-primary transition-colors" title="Attach Image">
+<span class="material-symbols-outlined text-base">image</span>
+</button>
+</div>
+<button class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary-container transition-colors shadow-xs" title="Send Message">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+<!-- Footer Action & Settings -->
+<div class="flex items-center justify-between">
+<!-- Invite CTA -->
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm font-bold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-base">person_add</span>
+<span>Invite Teammate</span>
+</button>
+<!-- Settings Button from JSON Footer -->
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Room Settings">
+<span class="material-symbols-outlined text-base" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</aside>
+</body></html>

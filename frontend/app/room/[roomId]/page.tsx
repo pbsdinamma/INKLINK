@@ -12,6 +12,7 @@ import { useChat } from "@/hooks/useChat";
 import { getSocket } from "@/lib/socket";
 import type { RoomState, Stroke, User, ChatMessage, Tool } from "@/types";
 
+import { WorkspaceControls } from "@/components/whiteboard/WorkspaceControls";
 import {
   DEFAULT_COLOR,
   DEFAULT_BRUSH_SIZE,
@@ -29,6 +30,8 @@ import {
   ChevronLeft,
   Pencil,
   Dices,
+  Download,
+  Share2,
 } from "lucide-react";
 
 import { Toaster, toast } from "react-hot-toast";
@@ -471,6 +474,41 @@ export default function RoomPage({ params }: RoomPageProps) {
               )}
             </AnimatePresence>
           </motion.button>
+
+          {/* Export Canvas as PNG (Stitch header action) */}
+          <motion.button
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 450, damping: 16 }}
+            onClick={() => downloadRef.current()}
+            className="skribbl-button hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-black bg-white hover:bg-brand-bg transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer"
+            title="Export Canvas as PNG"
+          >
+            <Download className="w-3.5 h-3.5 text-brand-border" />
+            <span>Export</span>
+          </motion.button>
+
+          {/* Share Room Button (Stitch prominent action) */}
+          <motion.button
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 450, damping: 16 }}
+            onClick={handleCopyRoomId}
+            className="skribbl-button flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-black bg-brand-blue text-white hover:bg-brand-blue/90 transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer"
+            title="Share Room Link"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-brand-green" />
+                <span>Copied!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Share</span>
+              </>
+            )}
+          </motion.button>
         </div>
       </motion.header>
 
@@ -541,8 +579,11 @@ export default function RoomPage({ params }: RoomPageProps) {
             )}
           </AnimatePresence>
 
+          {/* Stitch Workspace Controls (Zoom & Fullscreen) */}
+          <WorkspaceControls />
+
           {/* Subtle Floating Keyboard Shortcuts Pill */}
-          <div className="absolute bottom-3 left-4 hidden lg:flex items-center gap-3 px-3 py-1.5 bg-white/80 backdrop-blur-md border-2 border-brand-border/15 rounded-xl text-[10px] font-black text-brand-border/50 select-none shadow-[0_2px_0px_rgba(19,20,31,0.04)] pointer-events-none z-20">
+          <div className="absolute bottom-3 left-48 hidden xl:flex items-center gap-3 px-3 py-1.5 bg-white/80 backdrop-blur-md border-2 border-brand-border/15 rounded-xl text-[10px] font-black text-brand-border/50 select-none shadow-[0_2px_0px_rgba(19,20,31,0.04)] pointer-events-none z-20">
             <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">P</kbd> Pen</span>
             <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">E</kbd> Eraser</span>
             <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">Ctrl+Z</kbd> Undo</span>
