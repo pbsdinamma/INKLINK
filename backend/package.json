@@ -2,11 +2,11 @@
   "name": "whiteboard-backend",
   "version": "1.0.0",
   "description": "Real-time collaborative whiteboard backend",
-  "main": "dist/server.js",
+  "main": "dist/backend/src/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
+    "build": "tsc && node -e \"const fs=require('fs'); fs.writeFileSync('dist/server.js', 'require(\\'./backend/src/server.js\\');');\"",
+    "start": "node dist/backend/src/server.js",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
