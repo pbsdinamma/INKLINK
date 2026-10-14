@@ -12,8 +12,23 @@ let socket: AppSocket | null = null;
  */
 export function getSocket(): AppSocket {
   if (!socket) {
-    const url =
-      process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:3001";
+    const isClient = typeof window !== "undefined";
+    const isLocalhost =
+      isClient &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1");
+
+    let url = process.env.NEXT_PUBLIC_SOCKET_URL;
+    if (!url) {
+      if (isLocalhost || !isClient) {
+        url = "http://localhost:3001";
+      } else {
+        console.warn(
+          "[InkLink] NEXT_PUBLIC_SOCKET_URL is not configured in Vercel environment variables. WebSocket connections require a deployed backend server."
+        );
+        url = "http://localhost:3001";
+      }
+    }
 
     socket = io(url, {
       autoConnect: false, // connect manually after setting up listeners

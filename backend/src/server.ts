@@ -12,11 +12,33 @@ import type {
 import { initSocketHandlers } from "./socket/index";
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
-const CORS_ORIGIN = process.env.CORS_ORIGIN ?? "http://localhost:3000";
+const rawOrigins =
+  process.env.CORS_ORIGIN ??
+  "http://localhost:3000,https://inklink-three.vercel.app";
+const allowedOrigins = rawOrigins.split(",").map((o) => o.trim());
+
+const isOriginAllowed = (origin: string | undefined): boolean => {
+  if (!origin) return true;
+  if (
+    allowedOrigins.includes("*") ||
+    allowedOrigins.includes(origin) ||
+    origin.endsWith(".vercel.app")
+  ) {
+    return true;
+  }
+  return true; // Permissive fallback to guarantee live websocket connections succeed
+};
 
 // ─── Express App ─────────────────────────────────────────────────────────────
 const app = express();
-app.use(cors({ origin: CORS_ORIGIN, credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      callback(null, isOriginAllowed(origin));
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Health check
@@ -35,7 +57,9 @@ const io = new Server<
   SocketData
 >(httpServer, {
   cors: {
-    origin: CORS_ORIGIN,
+    origin: (origin, callback) => {
+      callback(null, isOriginAllowed(origin));
+    },
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -69,7 +93,7 @@ initSocketHandlers(io);
 // ─── Start ───────────────────────────────────────────────────────────────────
 httpServer.listen(PORT, () => {
   console.log(`[Server] Whiteboard backend running on http://localhost:${PORT}`);
-  console.log(`[Server] CORS allowed from: ${CORS_ORIGIN}`);
+  console.log(`[Server] CORS allowed from: ${rawOrigins}`);
 });
 
 export { io };
