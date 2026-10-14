@@ -3,7 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, User, KeyRound } from "lucide-react";
 
 export function RoomForm({ className }: { className?: string } = {}) {
@@ -49,14 +49,15 @@ export function RoomForm({ className }: { className?: string } = {}) {
           {(["create", "join"] as const).map((m) => {
             const isActive = mode === m;
             return (
-              <button
+              <motion.button
                 key={m}
                 type="button"
+                whileTap={{ scale: 0.98 }}
                 onClick={() => {
                   setMode(m);
                   setError("");
                 }}
-                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all relative z-10 cursor-pointer ${
+                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors relative z-10 cursor-pointer ${
                   isActive ? "text-white" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
@@ -64,11 +65,11 @@ export function RoomForm({ className }: { className?: string } = {}) {
                   <motion.div
                     layoutId="roomModeSlider"
                     className="absolute inset-0 bg-brand-blue rounded-lg -z-10 shadow-sm"
-                    transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                    transition={{ type: "spring", stiffness: 450, damping: 30 }}
                   />
                 )}
                 {m === "create" ? "Create New Room" : "Join Existing Room"}
-              </button>
+              </motion.button>
             );
           })}
         </div>
@@ -97,10 +98,10 @@ export function RoomForm({ className }: { className?: string } = {}) {
           <AnimatePresence mode="popLayout">
             {mode === "join" && (
               <motion.div
-                initial={{ opacity: 0, height: 0, scale: 0.98 }}
+                initial={{ opacity: 0, height: 0, scale: 0.96 }}
                 animate={{ opacity: 1, height: "auto", scale: 1 }}
-                exit={{ opacity: 0, height: 0, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
+                exit={{ opacity: 0, height: 0, scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 26 }}
                 className="space-y-1 overflow-hidden"
               >
                 <label className="block text-xs font-bold text-slate-700 text-left">
@@ -121,13 +122,19 @@ export function RoomForm({ className }: { className?: string } = {}) {
             )}
           </AnimatePresence>
 
-          {/* Error Message */}
+          {/* Error Message with Bouncy Spring Shake */}
           <AnimatePresence>
             {error && (
               <motion.p
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  x: [0, -6, 6, -4, 4, -2, 2, 0],
+                }}
+                exit={{ opacity: 0, y: -4, scale: 0.95 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
                 className="text-rose-600 text-xs font-bold bg-rose-50 border border-rose-200 rounded-lg px-3 py-2 text-center"
               >
                 {error}
@@ -135,11 +142,14 @@ export function RoomForm({ className }: { className?: string } = {}) {
             )}
           </AnimatePresence>
 
-          {/* Submit Action Button */}
-          <button
+          {/* Submit Action Button with Spring Hover & Tap */}
+          <motion.button
             type="submit"
             disabled={loading}
-            className="w-full bg-brand-blue hover:bg-brand-blue/95 active:scale-[0.99] text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md shadow-brand-blue/20 hover:shadow-lg hover:shadow-brand-blue/25 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            whileHover={{ scale: 1.015, y: -1 }}
+            whileTap={{ scale: 0.985 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="w-full group bg-brand-blue hover:bg-brand-blue/95 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md shadow-brand-blue/20 hover:shadow-lg hover:shadow-brand-blue/25 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
@@ -148,10 +158,10 @@ export function RoomForm({ className }: { className?: string } = {}) {
                 <span className="text-sm font-bold">
                   {mode === "create" ? "Create Room & Start Drawing" : "Join Canvas Room"}
                 </span>
-                <ArrowRight className="w-4 h-4 shrink-0" />
+                <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-150 group-hover:translate-x-1" />
               </>
             )}
-          </button>
+          </motion.button>
         </form>
       </motion.div>
     </div>

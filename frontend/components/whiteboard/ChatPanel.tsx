@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import type { ChatMessage } from "@/types";
 import { useChat } from "@/hooks/useChat";
 import type { AppSocket } from "@/lib/socket";
@@ -58,17 +58,26 @@ export function ChatPanel({
           <MessageSquare className="w-4 h-4 text-brand-blue" />
           <span className="text-sm font-black text-brand-border select-none">Chat</span>
           {messages.length > 0 && (
-            <span className="text-xs bg-brand-blue/10 border-2 border-brand-border/10 text-brand-blue font-black rounded-full px-2 py-0.5">
+            <motion.span
+              key={messages.length}
+              initial={{ scale: 0.7 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 500, damping: 15 }}
+              className="text-xs bg-brand-blue/10 border-2 border-brand-border/10 text-brand-blue font-black rounded-full px-2 py-0.5"
+            >
               {messages.length}
-            </span>
+            </motion.span>
           )}
         </div>
-        <button
+        <motion.button
+          whileHover={{ scale: 1.15, rotate: 90 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 450, damping: 14 }}
           onClick={onClose}
-          className="text-brand-border/40 hover:text-brand-border transition-colors p-1 rounded-lg hover:bg-brand-border/5"
+          className="text-brand-border/40 hover:text-brand-border transition-colors p-1 rounded-lg hover:bg-brand-border/5 cursor-pointer"
         >
           <X className="w-4 h-4" />
-        </button>
+        </motion.button>
       </div>
 
       {/* Messages */}
@@ -78,14 +87,16 @@ export function ChatPanel({
             No messages yet. Say hi! 👋
           </div>
         )}
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div
+              layout
               key={msg.id}
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              initial={{ opacity: 0, y: 12, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="flex flex-col gap-0.5 bg-brand-bg/40 border border-brand-border/5 p-2.5 rounded-2xl"
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 26 }}
+              className="flex flex-col gap-0.5 bg-brand-bg/40 border border-brand-border/10 p-2.5 rounded-2xl shadow-[0_1px_2px_rgba(19,20,31,0.03)]"
             >
               <div className="flex items-center gap-1.5 justify-between">
                 <span
@@ -123,11 +134,12 @@ export function ChatPanel({
             className="skribbl-input flex-1 text-xs px-3 py-2.5 w-full font-bold select-text placeholder-brand-border/30"
           />
           <motion.button
-            whileHover={input.trim() ? { scale: 1.05 } : {}}
-            whileTap={input.trim() ? { scale: 0.95 } : {}}
+            whileHover={input.trim() ? { scale: 1.08, y: -1 } : {}}
+            whileTap={input.trim() ? { scale: 0.92 } : {}}
+            transition={{ type: "spring", stiffness: 450, damping: 16 }}
             onClick={handleSend}
             disabled={!input.trim()}
-            className="skribbl-button bg-brand-blue text-white w-9 h-9 flex items-center justify-center shrink-0 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="skribbl-button bg-brand-blue text-white w-9 h-9 flex items-center justify-center shrink-0 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed shadow-[0_2.5px_0px_#13141f]"
           >
             <Send className="w-3.5 h-3.5" />
           </motion.button>

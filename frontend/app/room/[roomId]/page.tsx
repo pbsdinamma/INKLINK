@@ -2,7 +2,7 @@
 
 import { use, useCallback, useRef, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Canvas } from "@/components/whiteboard/Canvas";
 import { Toolbar } from "@/components/whiteboard/Toolbar";
 import { UserList } from "@/components/whiteboard/UserList";
@@ -20,6 +20,7 @@ import {
 
 import {
   Copy,
+  Check,
   MessageSquare,
   Users,
   Wifi,
@@ -60,6 +61,7 @@ export default function RoomPage({ params }: RoomPageProps) {
   const [showUsers, setShowUsers] = useState(true);
   const [isReplaying, setIsReplaying] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   // ─── Canvas Action Refs ───────────────────────────────────
   const undoRef = useRef<() => void>(() => {});
@@ -105,7 +107,6 @@ export default function RoomPage({ params }: RoomPageProps) {
   const socket = getSocket();
 
   // ─── Undo / Redo Bug Fix Logic ────────────────────────────
-  // Calculate if the user has drawn any strokes they can undo
   const canUndo = strokes.some(
     (s) => s.userId === currentUserId || s.userId === "local"
   );
@@ -114,7 +115,6 @@ export default function RoomPage({ params }: RoomPageProps) {
   // Track strokes length to clear/reset redo availability
   const prevStrokesLengthRef = useRef(0);
   useEffect(() => {
-    // If a new stroke was added by us, reset local redo count
     if (strokes.length > prevStrokesLengthRef.current) {
       const lastStroke = strokes[strokes.length - 1];
       if (
@@ -124,7 +124,6 @@ export default function RoomPage({ params }: RoomPageProps) {
         setRedoCount(0);
       }
     }
-    // If board is fully cleared, reset redo count
     if (strokes.length === 0) {
       setRedoCount(0);
     }
@@ -189,7 +188,9 @@ export default function RoomPage({ params }: RoomPageProps) {
   const handleCopyRoomId = () => {
     const url = `${window.location.origin}/room/${roomId}`;
     navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
       toast.success("Room invite link copied!", { duration: 2500 });
+      setTimeout(() => setCopied(false), 2000);
     });
   };
 
@@ -204,7 +205,7 @@ export default function RoomPage({ params }: RoomPageProps) {
     };
 
     return (
-      <main className="min-h-screen text-[#13141f] flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden">
+      <main className="min-h-screen text-[#13141f] flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden bg-brand-bg">
         {/* Playful Floating Doodles (Background) */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
           <motion.div
@@ -241,8 +242,13 @@ export default function RoomPage({ params }: RoomPageProps) {
           />
         </div>
 
-        <div className="relative w-full max-w-md text-center z-10">
-          <div className="skribbl-card bg-white p-8 relative overflow-hidden text-center">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 280, damping: 22 }}
+          className="relative w-full max-w-md text-center z-10"
+        >
+          <div className="skribbl-card bg-white p-8 relative overflow-hidden text-center shadow-[0_8px_0px_#13141f]">
             <h2 className="text-2xl font-black mb-1 text-brand-border select-none">
               Welcome to InkLink!
             </h2>
@@ -259,15 +265,17 @@ export default function RoomPage({ params }: RoomPageProps) {
                 className="w-full bg-white border-3 border-[#13141f] rounded-2xl px-4 py-3.5 text-sm font-black text-[#13141f] placeholder-[#13141f]/35 focus:outline-none focus:border-[#1e6bf1]"
                 autoFocus
               />
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="submit"
                 className="w-full bg-[#ff7e1b] text-white font-black py-4 border-3 border-[#13141f] rounded-2xl flex items-center justify-center gap-2 hover:bg-[#ff7e1b]/95 shadow-[0_5px_0px_#13141f] cursor-pointer"
               >
                 Join Room
-              </button>
+              </motion.button>
             </form>
           </div>
-        </div>
+        </motion.div>
       </main>
     );
   }
@@ -295,18 +303,20 @@ export default function RoomPage({ params }: RoomPageProps) {
       <motion.header
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        transition={{ type: "spring", stiffness: 240, damping: 20 }}
         className="skribbl-card flex items-center justify-between px-5 py-3 select-none shrink-0 bg-white z-10"
       >
         {/* Left: Brand logo + Copy invite link */}
         <div className="flex items-center gap-4">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
             onClick={() => router.push("/")}
-            className="flex items-center justify-center w-8 h-8 rounded-xl border-2 border-brand-border hover:bg-brand-bg select-none transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-xl border-2 border-brand-border hover:bg-brand-bg select-none transition-colors cursor-pointer"
             title="Leave Room"
           >
             <ChevronLeft className="w-4 h-4" />
-          </button>
+          </motion.button>
 
           <div className="hidden sm:flex items-center gap-2">
             <span className="text-sm font-black text-brand-border select-none">
@@ -315,28 +325,39 @@ export default function RoomPage({ params }: RoomPageProps) {
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.04, y: -1 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 450, damping: 16 }}
             onClick={handleCopyRoomId}
-            className="skribbl-button flex items-center gap-2 bg-brand-bg hover:bg-brand-bg/85 px-3 py-1.5 text-xs font-black select-none shadow-[0_3px_0px_#13141f]"
+            className="skribbl-button flex items-center gap-2 bg-brand-bg hover:bg-brand-bg/85 px-3 py-1.5 text-xs font-black select-none shadow-[0_3px_0px_#13141f] cursor-pointer"
             title="Copy Invite Link"
           >
             <span className="font-mono tracking-wider text-brand-blue uppercase">
               {roomId}
             </span>
-            <Copy className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+            {copied ? (
+              <Check className="w-3.5 h-3.5 text-brand-green shrink-0" />
+            ) : (
+              <Copy className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+            )}
           </motion.button>
         </div>
 
         {/* Center: Realtime Connection Badge */}
         <div className="flex items-center gap-2">
           {reconnecting ? (
-            <div className="flex items-center gap-1.5 text-brand-orange text-xs font-black bg-brand-orange/5 border-2 border-brand-orange/20 rounded-full px-3 py-1 animate-pulse">
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: [1, 1.03, 1] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="flex items-center gap-1.5 text-brand-orange text-xs font-black bg-brand-orange/5 border-2 border-brand-orange/20 rounded-full px-3 py-1"
+            >
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
               Reconnecting...
-            </div>
+            </motion.div>
           ) : connected ? (
             <div className="flex items-center gap-1.5 text-brand-green text-xs font-black bg-brand-green/5 border-2 border-brand-green/20 rounded-full px-3 py-1">
+              <span className="w-2 h-2 rounded-full bg-brand-green" />
               <Wifi className="w-3.5 h-3.5" />
               Sync Active
             </div>
@@ -350,9 +371,12 @@ export default function RoomPage({ params }: RoomPageProps) {
 
         {/* Right: User list and chat controls */}
         <div className="flex items-center gap-2">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 450, damping: 16 }}
             onClick={() => setShowUsers((v) => !v)}
-            className={`skribbl-button relative flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-black transition-all shadow-[0_3px_0px_#13141f] ${
+            className={`skribbl-button relative flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-black transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer ${
               showUsers
                 ? "bg-brand-blue text-white hover:bg-brand-blue/90"
                 : "bg-white text-brand-border hover:bg-brand-bg"
@@ -369,11 +393,14 @@ export default function RoomPage({ params }: RoomPageProps) {
             >
               {users.length}
             </span>
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 450, damping: 16 }}
             onClick={handleToggleChat}
-            className={`skribbl-button relative flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-black transition-all shadow-[0_3px_0px_#13141f] ${
+            className={`skribbl-button relative flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-black transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer ${
               showChat
                 ? "bg-brand-blue text-white hover:bg-brand-blue/90"
                 : "bg-white text-brand-border hover:bg-brand-bg"
@@ -381,12 +408,20 @@ export default function RoomPage({ params }: RoomPageProps) {
           >
             <MessageSquare className="w-3.5 h-3.5 shrink-0" />
             <span className="hidden sm:inline">Chat</span>
-            {unreadCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-brand-pink text-white text-[9px] font-black border-2 border-brand-border rounded-full flex items-center justify-center">
-                {unreadCount}
-              </span>
-            )}
-          </button>
+            <AnimatePresence>
+              {unreadCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                  className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-brand-pink text-white text-[9px] font-black border-2 border-brand-border rounded-full flex items-center justify-center"
+                >
+                  {unreadCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
       </motion.header>
 
@@ -399,7 +434,7 @@ export default function RoomPage({ params }: RoomPageProps) {
               initial={{ x: -280, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -280, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 22 }}
+              transition={{ type: "spring", stiffness: 280, damping: 26 }}
               className="w-72 shrink-0 h-full hidden lg:block"
             >
               <UserList users={users} currentUserId={currentUserId} />
@@ -436,12 +471,17 @@ export default function RoomPage({ params }: RoomPageProps) {
           {/* Sockets Connecting Overlay */}
           {!connected && !reconnecting && (
             <div className="absolute inset-0 bg-brand-bg/85 backdrop-blur-sm flex items-center justify-center z-30 rounded-[24px] border-3 border-brand-border">
-              <div className="text-center p-6 bg-white border-3 border-brand-border rounded-3xl shadow-[0_6px_0px_#13141f] max-w-xs">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                className="text-center p-6 bg-white border-3 border-brand-border rounded-3xl shadow-[0_6px_0px_#13141f] max-w-xs"
+              >
                 <Loader2 className="w-8 h-8 text-brand-blue animate-spin mx-auto mb-3" />
                 <p className="text-brand-border font-black text-sm">
                   Connecting to canvas...
                 </p>
-              </div>
+              </motion.div>
             </div>
           )}
         </div>
@@ -453,7 +493,7 @@ export default function RoomPage({ params }: RoomPageProps) {
               initial={{ x: 280, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 280, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 22 }}
+              transition={{ type: "spring", stiffness: 280, damping: 26 }}
               className="w-72 shrink-0 h-full hidden md:block"
             >
               <ChatPanel

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import type { Tool } from "@/types";
 import { TOOLS } from "@/lib/constants";
 import {
@@ -139,14 +139,14 @@ export function Toolbar({
   return (
     <div className="fixed bottom-6 left-0 right-0 z-40 flex justify-center pointer-events-none px-4 select-none">
       <motion.div
-        initial={{ y: 80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        initial={{ y: 80, opacity: 0, scale: 0.95 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        transition={{ type: "spring", stiffness: 280, damping: 22 }}
         whileHover={{ y: -2 }}
         className="pointer-events-auto max-w-[95vw] md:max-w-max bg-white/95 backdrop-blur-md border-4 border-brand-border rounded-[32px] shadow-[0_8px_0px_#13141f] px-5 py-3.5 flex flex-col md:flex-row items-center gap-3.5 md:gap-4 flex-nowrap overflow-x-auto md:overflow-visible scrollbar-none"
       >
-        {/* ── Pod 1: Drawing Tools ────────────────────────────── */}
-        <div className="flex items-center gap-1.5 p-1 bg-[#f3f7ff] border-2 border-brand-border rounded-2xl shrink-0 shadow-[inset_0_2px_4px_rgba(19,20,31,0.04)]">
+        {/* ── Pod 1: Drawing Tools (Animated Sliding Pill) ──── */}
+        <div className="relative flex items-center gap-1.5 p-1 bg-[#f3f7ff] border-2 border-brand-border rounded-2xl shrink-0 shadow-[inset_0_2px_4px_rgba(19,20,31,0.04)]">
           <ToolBtn
             active={tool === TOOLS.PEN}
             onClick={() => onToolChange(TOOLS.PEN)}
@@ -184,7 +184,7 @@ export function Toolbar({
                   whileTap={{ scale: 0.85 }}
                   transition={{ type: "spring", stiffness: 450, damping: 14 }}
                   className={cn(
-                    "w-7 h-7 rounded-full border-2 border-brand-border cursor-pointer relative transition-all duration-100",
+                    "w-7 h-7 rounded-full border-2 border-brand-border cursor-pointer relative transition-transform duration-100",
                     isSelected && "scale-105"
                   )}
                   style={{ 
@@ -196,7 +196,7 @@ export function Toolbar({
                     <motion.div
                       layoutId="activeColorBorder"
                       className="absolute inset-[-4px] border-2 border-[#13141f] rounded-full pointer-events-none"
-                      transition={{ type: "spring", stiffness: 450, damping: 14 }}
+                      transition={{ type: "spring", stiffness: 450, damping: 16 }}
                     />
                   )}
                 </motion.button>
@@ -209,8 +209,10 @@ export function Toolbar({
         <div className="flex items-center gap-3.5 shrink-0 px-3 py-1.5 bg-[#f3f7ff] border-2 border-brand-border rounded-2xl shadow-[inset_0_2px_4px_rgba(19,20,31,0.04)]">
           {/* Dynamic preview dot */}
           <div className="flex items-center justify-center w-8 h-8 border-2 border-[#13141f] rounded-xl bg-white relative overflow-hidden shrink-0">
-            <div
-              className="rounded-full transition-all duration-100"
+            <motion.div
+              layout
+              transition={{ type: "spring", stiffness: 500, damping: 25 }}
+              className="rounded-full transition-colors duration-100"
               style={{
                 width: previewSize,
                 height: previewSize,
@@ -220,8 +222,8 @@ export function Toolbar({
             />
           </div>
 
-          {/* Quick Preset Buttons */}
-          <div className="flex items-center gap-1.5 shrink-0 bg-white/50 border border-brand-border/10 p-0.5 rounded-lg">
+          {/* Quick Preset Buttons with animated sliding indicator */}
+          <div className="flex items-center gap-1.5 shrink-0 bg-white/50 border border-brand-border/10 p-0.5 rounded-lg relative">
             {[4, 12, 24].map((size) => {
               const isActive = brushSize === size;
               const dotSize = size === 4 ? "w-1.5 h-1.5" : size === 12 ? "w-3 h-3" : "w-4 h-4";
@@ -231,18 +233,23 @@ export function Toolbar({
                   <motion.button
                     type="button"
                     onClick={() => onBrushSizeChange(size)}
-                    whileHover={{ scale: 1.2 }}
+                    whileHover={{ scale: 1.15 }}
                     whileTap={{ scale: 0.9 }}
                     className={cn(
-                      "w-6 h-6 rounded-md flex items-center justify-center border-2 border-transparent transition-all cursor-pointer relative",
-                      isActive
-                        ? "bg-brand-blue border-brand-border shadow-[0_1.5px_0px_#13141f]"
-                        : "bg-transparent hover:bg-brand-border/5"
+                      "w-6 h-6 rounded-md flex items-center justify-center relative cursor-pointer z-10 transition-colors",
+                      !isActive && "hover:bg-brand-border/5"
                     )}
                   >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeSizePill"
+                        className="absolute inset-0 bg-brand-blue border-2 border-brand-border rounded-md shadow-[0_1.5px_0px_#13141f] -z-10"
+                        transition={{ type: "spring", stiffness: 450, damping: 22 }}
+                      />
+                    )}
                     <div
                       className={cn(
-                        "rounded-full shrink-0",
+                        "rounded-full shrink-0 transition-colors",
                         isActive ? "bg-white" : "bg-brand-border/60",
                         dotSize
                       )}
@@ -296,24 +303,37 @@ export function Toolbar({
             <Download className="w-4 h-4" />
           </IconBtn>
 
-          <IconBtn
-            onClick={onReplay}
-            title={isReplaying ? "Stop Replay" : "Replay Canvas"}
-            className={isReplaying ? "text-white bg-brand-orange border-brand-border shadow-[0_2px_0px_#13141f]" : ""}
-            activeGlow={isReplaying ? "shadow-[0_0_12px_rgba(255,126,27,0.5)] animate-pulse" : ""}
-          >
-            {isReplaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-          </IconBtn>
+          {/* Replay Button with breathing pulse when active */}
+          <Tooltip content={isReplaying ? "Stop Replay" : "Replay Canvas"} shortcut="R">
+            <motion.button
+              onClick={onReplay}
+              whileHover={{ scale: 1.12, y: -2 }}
+              whileTap={{ scale: 0.9 }}
+              animate={isReplaying ? { scale: [1, 1.08, 1] } : {}}
+              transition={isReplaying ? { repeat: Infinity, duration: 1.2, ease: "easeInOut" } : { type: "spring", stiffness: 450, damping: 14 }}
+              className={cn(
+                "w-9 h-9 rounded-xl flex items-center justify-center select-none cursor-pointer border-2 transition-all",
+                isReplaying
+                  ? "text-white bg-brand-orange border-brand-border shadow-[0_2px_0px_#13141f] shadow-[0_0_16px_rgba(255,126,27,0.6)]"
+                  : "text-brand-border/60 hover:text-brand-border hover:bg-brand-border/5 hover:border-brand-border hover:shadow-[0_2.5px_0px_#13141f] bg-white border-transparent"
+              )}
+            >
+              {isReplaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            </motion.button>
+          </Tooltip>
 
-          {/* Single-click immediate Clear */}
-          <button
+          {/* Single-click immediate Clear button with spring bounce */}
+          <motion.button
+            whileHover={{ scale: 1.06, y: -2 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: "spring", stiffness: 450, damping: 14 }}
             onClick={onClear}
-            className="skribbl-button flex items-center gap-1.5 px-3 py-1.5 text-xs font-black select-none cursor-pointer h-9 shrink-0 bg-white text-brand-pink hover:bg-brand-pink hover:text-white border-2 border-brand-border transition-all duration-100 shadow-[0_2.5px_0px_#13141f] active:translate-y-0.5 active:shadow-[0_1px_0px_#13141f]"
+            className="skribbl-button flex items-center gap-1.5 px-3 py-1.5 text-xs font-black select-none cursor-pointer h-9 shrink-0 bg-white text-brand-pink hover:bg-brand-pink hover:text-white border-2 border-brand-border transition-colors duration-100 shadow-[0_2.5px_0px_#13141f]"
             title="Clear Board"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span className="text-[11px] font-black">Clear</span>
-          </button>
+          </motion.button>
         </div>
       </motion.div>
     </div>
@@ -343,16 +363,27 @@ function ToolBtn({
     <Tooltip content={title} shortcut={shortcut}>
       <motion.button
         onClick={onClick}
-        whileHover={{ scale: 1.15, y: -2 }}
+        whileHover={{ scale: 1.12, y: -1 }}
         whileTap={{ scale: 0.9 }}
-        transition={{ type: "spring", stiffness: 450, damping: 14 }}
+        transition={{ type: "spring", stiffness: 450, damping: 16 }}
         className={cn(
-          "w-9 h-9 rounded-xl flex items-center justify-center border-2 border-transparent transition-all select-none cursor-pointer",
+          "relative w-9 h-9 rounded-xl flex items-center justify-center transition-colors select-none cursor-pointer z-10",
           active
-            ? cn(activeColor, "text-white border-[#13141f] shadow-[0_2.5px_0px_#13141f]", activeGlow)
+            ? "text-white"
             : "text-brand-border/40 hover:text-brand-border hover:bg-brand-border/5"
         )}
       >
+        {active && (
+          <motion.div
+            layoutId="activeToolPill"
+            className={cn(
+              "absolute inset-0 rounded-xl border-2 border-[#13141f] shadow-[0_2.5px_0px_#13141f] -z-10",
+              activeColor,
+              activeGlow
+            )}
+            transition={{ type: "spring", stiffness: 420, damping: 24 }}
+          />
+        )}
         {children}
       </motion.button>
     </Tooltip>

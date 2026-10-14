@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, AnimatePresence } from "motion/react";
 import type { RemoteCursor } from "@/hooks/useCursor";
 
 interface CursorOverlayProps {
@@ -13,7 +14,7 @@ interface CursorOverlayProps {
 
 /**
  * SVG overlay that renders all remote user cursors with labels.
- * Positioned absolutely over the canvas element.
+ * Positioned absolutely over the canvas element with buttery spring motion physics.
  */
 export function CursorOverlay({
   cursors,
@@ -32,58 +33,70 @@ export function CursorOverlay({
       height={displayHeight}
       style={{ overflow: "visible" }}
     >
-      {Array.from(cursors.values()).map((cursor) => {
-        const cx = cursor.x * scaleX;
-        const cy = cursor.y * scaleY;
-        return (
-          <g
-            key={cursor.userId}
-            style={{
-              transform: `translate(${cx}px, ${cy}px)`,
-              transition: "transform 0.12s cubic-bezier(0.1, 0.8, 0.25, 1.0)",
-            }}
-          >
-            {/* Cursor arrow */}
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 20 20"
-              fill="none"
-              style={{ overflow: "visible" }}
+      <AnimatePresence>
+        {Array.from(cursors.values()).map((cursor) => {
+          const cx = cursor.x * scaleX;
+          const cy = cursor.y * scaleY;
+          return (
+            <motion.g
+              key={cursor.userId}
+              initial={{ opacity: 0, scale: 0.4 }}
+              animate={{
+                x: cx,
+                y: cy,
+                opacity: 1,
+                scale: 1,
+              }}
+              exit={{ opacity: 0, scale: 0.4 }}
+              transition={{
+                x: { type: "spring", stiffness: 450, damping: 28, mass: 0.6 },
+                y: { type: "spring", stiffness: 450, damping: 28, mass: 0.6 },
+                opacity: { duration: 0.15 },
+                scale: { type: "spring", stiffness: 400, damping: 20 },
+              }}
             >
-              <path
-                d="M4 2L18 10L11 12L8 18L4 2Z"
-                fill={cursor.color}
-                stroke="#13141f"
-                strokeWidth="2.5"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {/* Name label */}
-            <g transform="translate(16, 16)">
-              <rect
-                rx="6"
-                ry="6"
-                fill="#13141f"
-                x="-4"
-                y="-11"
-                width={cursor.username.length * 7 + 12}
-                height="18"
-              />
-              <text
-                fill="white"
-                fontSize="9"
-                fontFamily="var(--font-sans), sans-serif"
-                fontWeight="900"
-                dx="2"
-                dy="1"
+              {/* Cursor arrow */}
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 20 20"
+                fill="none"
+                style={{ overflow: "visible" }}
               >
-                {cursor.username}
-              </text>
-            </g>
-          </g>
-        );
-      })}
+                <path
+                  d="M4 2L18 10L11 12L8 18L4 2Z"
+                  fill={cursor.color}
+                  stroke="#13141f"
+                  strokeWidth="2.5"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {/* Name label */}
+              <g transform="translate(16, 16)">
+                <rect
+                  rx="6"
+                  ry="6"
+                  fill="#13141f"
+                  x="-4"
+                  y="-11"
+                  width={cursor.username.length * 7 + 14}
+                  height="18"
+                />
+                <text
+                  fill="white"
+                  fontSize="9"
+                  fontFamily="var(--font-sans), sans-serif"
+                  fontWeight="900"
+                  dx="2"
+                  dy="1"
+                >
+                  {cursor.username}
+                </text>
+              </g>
+            </motion.g>
+          );
+        })}
+      </AnimatePresence>
     </svg>
   );
 }
