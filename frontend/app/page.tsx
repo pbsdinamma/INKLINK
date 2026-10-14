@@ -1,7 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { RoomForm } from "@/components/landing/RoomForm";
+import { HeroCanvasPreview } from "@/components/landing/HeroCanvasPreview";
+import { FaqAccordion } from "@/components/landing/FaqAccordion";
 import { motion } from "motion/react";
 import {
   Pencil,
@@ -9,15 +10,18 @@ import {
   Users,
   MessageSquare,
   Play,
-  ShieldCheck,
   Sparkles,
   Command,
+  Palette,
+  Clock,
+  Layers,
+  Heart,
 } from "lucide-react";
 
 export default function LandingPage() {
   return (
     <main className="min-h-screen text-[#13141f] flex flex-col justify-between selection:bg-brand-blue/15 relative overflow-hidden bg-brand-bg">
-      {/* ── Ambient Floating Glows & Doodles (Motion.dev subtle background depth) ── */}
+      {/* ── Ambient Floating Glows & Doodles (Motion.dev background depth) ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none -z-10">
         <motion.div
           animate={{
@@ -26,7 +30,7 @@ export default function LandingPage() {
             y: [0, -20, 0],
           }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-24 -left-24 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl"
+          className="absolute -top-24 -left-24 w-96 h-96 bg-brand-blue/10 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -35,17 +39,17 @@ export default function LandingPage() {
             y: [0, 25, 0],
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-1/3 -right-24 w-96 h-96 bg-brand-orange/5 rounded-full blur-3xl"
+          className="absolute top-1/3 -right-24 w-96 h-96 bg-brand-orange/10 rounded-full blur-3xl"
         />
 
-        {/* Playful Floating Background Doodles */}
+        {/* Playful Floating Doodles with Sine Wave Springs */}
         <motion.div
           animate={{
             y: [0, -18, 0],
             rotate: [0, 12, 0],
           }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-28 left-8 md:left-20 w-10 h-10 border-3 border-brand-orange rounded-xl opacity-20"
+          className="absolute top-28 left-8 md:left-20 w-10 h-10 border-3 border-brand-orange rounded-xl opacity-25"
         />
         <motion.div
           animate={{
@@ -53,7 +57,7 @@ export default function LandingPage() {
             rotate: [0, -15, 0],
           }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-40 left-12 md:left-28 w-14 h-14 border-3 border-brand-blue rounded-full opacity-15"
+          className="absolute bottom-40 left-12 md:left-28 w-14 h-14 border-3 border-brand-blue rounded-full opacity-20"
         />
         <motion.div
           animate={{
@@ -61,7 +65,7 @@ export default function LandingPage() {
             rotate: [0, 18, 0],
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-          className="absolute top-48 right-8 md:right-24 w-12 h-12 border-3 border-brand-green rounded-2xl opacity-20"
+          className="absolute top-48 right-8 md:right-24 w-12 h-12 border-3 border-brand-green rounded-2xl opacity-25"
         />
       </div>
 
@@ -77,12 +81,12 @@ export default function LandingPage() {
             whileHover={{ scale: 1.1, rotate: [-2, 4, -2] }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            className="w-10 h-10 bg-brand-blue rounded-xl flex items-center justify-center text-white shadow-[0_3px_0px_#13141f] border-2 border-brand-border cursor-pointer"
+            className="w-11 h-11 bg-brand-blue rounded-2xl flex items-center justify-center text-white shadow-[0_3.5px_0px_#13141f] border-3 border-brand-border cursor-pointer"
           >
             <Pencil className="w-5 h-5" />
           </motion.div>
           <div>
-            <h1 className="text-xl font-black tracking-tight leading-none text-[#13141f]">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight leading-none text-[#13141f]">
               Ink<span className="text-brand-blue">Link</span>
             </h1>
             <p className="text-[10px] font-black text-brand-border/40 uppercase tracking-wider mt-0.5">
@@ -97,25 +101,25 @@ export default function LandingPage() {
           transition={{ type: "spring", stiffness: 350, damping: 25 }}
           className="flex items-center gap-3"
         >
-          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 bg-white border-2 border-brand-border rounded-full text-xs font-black text-brand-border shadow-[0_2.5px_0px_#13141f]">
-            <span className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
+          <div className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 bg-white border-2 border-brand-border rounded-full text-xs font-black text-brand-border shadow-[0_3px_0px_#13141f]">
+            <span className="w-2.5 h-2.5 rounded-full bg-brand-green animate-pulse" />
             No sign-up required · Free & instant
           </div>
         </motion.div>
       </header>
 
-      {/* ── Hero Section: Intro + Form + Product Visual ─────────── */}
+      {/* ── Hero Section: Intro + Form + Live Interactive Preview ─── */}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* Left Column: Heading, Description, Clean Feature Row & CTA Form */}
+          {/* Left Column: Heading, Description, Feature Badges & CTA Form */}
           <div className="lg:col-span-5 flex flex-col justify-center">
             {/* Eyebrow Badge */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 border-2 border-brand-blue/30 rounded-full text-xs font-black text-brand-blue w-max mb-4 shadow-[0_2px_0px_rgba(30,107,241,0.2)]"
+              className="inline-flex items-center gap-2 px-3.5 py-1 bg-brand-blue/10 border-2 border-brand-blue/30 rounded-full text-xs font-black text-brand-blue w-max mb-4 shadow-[0_2px_0px_rgba(30,107,241,0.2)]"
             >
               <Sparkles className="w-3.5 h-3.5" />
               Real-time Collaborative Canvas
@@ -141,7 +145,7 @@ export default function LandingPage() {
               transition={{ duration: 0.45, delay: 0.16 }}
               className="text-brand-border/70 text-sm sm:text-base font-bold leading-relaxed mb-6"
             >
-              InkLink is a lightweight, real-time multiplayer whiteboard built for brainstorming, rapid sketching, and team work sessions. Jump in with zero setup — draw simultaneously, view live cursors, chat with room members, and replay board history.
+              InkLink is an open, real-time multiplayer whiteboard built for brainstorming, rapid sketching, and team work sessions. Jump in with zero setup — draw simultaneously, view live cursors, chat with room members, and replay board history.
             </motion.p>
 
             {/* Clean Feature Highlights with Staggered Entrance */}
@@ -172,7 +176,7 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Functional & Prominent CTA Card */}
+            {/* Prominent CTA Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -183,74 +187,31 @@ export default function LandingPage() {
             </motion.div>
           </div>
 
-          {/* Right Column: Authentic Product Visual (Clean, unadorned app frame with subtle float) */}
+          {/* Right Column: Live Interactive Drawing Canvas Preview */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 24, delay: 0.15 }}
             className="lg:col-span-7 flex flex-col items-center"
           >
-            <div className="w-full">
-              {/* Clean App Window Frame */}
-              <motion.div
-                whileHover={{ y: -6, scale: 1.01 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white border-3 border-brand-border rounded-[24px] shadow-[0_12px_0px_#13141f] overflow-hidden"
-              >
-                {/* Minimal Window Header */}
-                <div className="bg-[#fbfcfe] border-b-2 border-brand-border px-4 py-3 flex items-center justify-between select-none">
-                  {/* Window dots */}
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-brand-pink border border-brand-border" />
-                    <span className="w-3 h-3 rounded-full bg-brand-orange border border-brand-border" />
-                    <span className="w-3 h-3 rounded-full bg-brand-green border border-brand-border" />
-                  </div>
-
-                  {/* Clean URL bar */}
-                  <div className="flex items-center gap-1.5 bg-brand-bg border-2 border-brand-border/30 rounded-lg px-3 py-1 text-[11px] font-mono text-brand-border font-bold">
-                    <ShieldCheck className="w-3 h-3 text-brand-green" />
-                    <span>inklink.app/room/art-studio</span>
-                  </div>
-
-                  {/* Live status with pulsing badge */}
-                  <div className="flex items-center gap-1.5 text-[11px] font-black text-brand-blue">
-                    <span className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
-                    <span>Live Session</span>
-                  </div>
-                </div>
-
-                {/* Actual Product Screenshot */}
-                <div className="relative w-full aspect-[16/9] bg-slate-100 overflow-hidden">
-                  <Image
-                    src="/whiteboard-preview.png"
-                    alt="InkLink Real-time Collaborative Whiteboard"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 58vw"
-                    className="object-cover object-top select-none"
-                  />
-                </div>
-              </motion.div>
-
-              {/* Subdued Caption */}
-              <p className="mt-4 text-xs font-bold text-brand-border/50 text-center select-none">
-                Live product preview with real-time multiplayer drawing, cursors, chat, and toolbar.
-              </p>
-            </div>
+            <HeroCanvasPreview />
           </motion.div>
         </div>
       </div>
 
-      {/* ── Clean 3-Column Feature Grid with Viewport Reveal ───── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t-2 border-brand-border/10">
+      {/* ── Modern Stitch Bento Grid Feature Showcase ─────────── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-14 border-t-2 border-brand-border/10">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.4 }}
-          className="text-center max-w-2xl mx-auto mb-10"
+          className="text-center max-w-2xl mx-auto mb-12"
         >
-          <h3 className="text-2xl sm:text-3xl font-black text-[#13141f] tracking-tight">
+          <span className="px-3.5 py-1 bg-brand-green/10 border-2 border-brand-green/30 text-brand-green text-xs font-black rounded-full uppercase tracking-wider mb-3 inline-block">
+            Engineered For Creators
+          </span>
+          <h3 className="text-3xl sm:text-4xl font-black text-[#13141f] tracking-tight mt-1">
             Built for speed and effortless collaboration
           </h3>
           <p className="text-sm font-bold text-brand-border/60 mt-2">
@@ -258,8 +219,9 @@ export default function LandingPage() {
           </p>
         </motion.div>
 
+        {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Feature 1 */}
+          {/* Bento Card 1: 60 FPS Delta Syncing */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -274,21 +236,22 @@ export default function LandingPage() {
                 transition={{ type: "spring", stiffness: 450, damping: 14 }}
                 className="w-12 h-12 rounded-2xl bg-brand-blue text-white border-2 border-brand-border flex items-center justify-center mb-4 shadow-[0_3px_0px_#13141f]"
               >
-                <Pencil className="w-5 h-5" />
+                <Zap className="w-6 h-6" />
               </motion.div>
-              <h4 className="text-base font-black text-[#13141f] mb-1.5">
-                Responsive Canvas & Tools
+              <h4 className="text-lg font-black text-[#13141f] mb-2">
+                60 FPS Freehand Sync
               </h4>
               <p className="text-xs text-brand-border/70 font-bold leading-relaxed">
-                Freehand pen, precision eraser, custom color picker, and dynamic brush sizes with smart per-user Undo/Redo.
+                Quadratic bezier curves interpolate raw pointer movement into buttery smooth ink lines without jagged steps or dropped frames.
               </p>
             </div>
-            <div className="mt-5 pt-3 border-t-2 border-brand-border/10 text-[11px] font-black text-brand-blue">
-              HTML5 Canvas with 60 FPS delta syncing
+            <div className="mt-5 pt-3 border-t-2 border-brand-border/10 flex items-center justify-between text-[11px] font-black text-brand-blue">
+              <span>HTML5 Canvas 2D</span>
+              <span>Ultra Low Latency</span>
             </div>
           </motion.div>
 
-          {/* Feature 2 */}
+          {/* Bento Card 2: Live Multiplayer Presence */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -303,21 +266,22 @@ export default function LandingPage() {
                 transition={{ type: "spring", stiffness: 450, damping: 14 }}
                 className="w-12 h-12 rounded-2xl bg-brand-green text-white border-2 border-brand-border flex items-center justify-center mb-4 shadow-[0_3px_0px_#13141f]"
               >
-                <Users className="w-5 h-5" />
+                <Users className="w-6 h-6" />
               </motion.div>
-              <h4 className="text-base font-black text-[#13141f] mb-1.5">
-                Live Multiplayer Cursors & Chat
+              <h4 className="text-lg font-black text-[#13141f] mb-2">
+                Multiplayer Cursors & Chat
               </h4>
               <p className="text-xs text-brand-border/70 font-bold leading-relaxed">
-                See where everyone is pointing with color-coded live cursor labels and talk directly inside the room chat with quick emoji reactions.
+                See teammate cursors glide in real-time with spring interpolation. Send instant messages and react with 1-tap quick emoji pills.
               </p>
             </div>
-            <div className="mt-5 pt-3 border-t-2 border-brand-border/10 text-[11px] font-black text-brand-green">
-              Real-time WebSockets via Socket.IO
+            <div className="mt-5 pt-3 border-t-2 border-brand-border/10 flex items-center justify-between text-[11px] font-black text-brand-green">
+              <span>Socket.IO Broadcasting</span>
+              <span>Online Presence</span>
             </div>
           </motion.div>
 
-          {/* Feature 3 */}
+          {/* Bento Card 3: Time Machine Replay */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -332,17 +296,18 @@ export default function LandingPage() {
                 transition={{ type: "spring", stiffness: 450, damping: 14 }}
                 className="w-12 h-12 rounded-2xl bg-brand-orange text-white border-2 border-brand-border flex items-center justify-center mb-4 shadow-[0_3px_0px_#13141f]"
               >
-                <Play className="w-5 h-5" />
+                <Play className="w-6 h-6" />
               </motion.div>
-              <h4 className="text-base font-black text-[#13141f] mb-1.5">
-                Stroke Replay & PNG Export
+              <h4 className="text-lg font-black text-[#13141f] mb-2">
+                Canvas History Replay
               </h4>
               <p className="text-xs text-brand-border/70 font-bold leading-relaxed">
-                Watch artwork unfold step-by-step with the animated replay engine, or export the full canvas as a clean PNG image.
+                Watch diagrams and sketches materialize stroke-by-stroke. Perfect for design presentations, tutorials, and step-by-step walkthroughs.
               </p>
             </div>
-            <div className="mt-5 pt-3 border-t-2 border-brand-border/10 text-[11px] font-black text-brand-orange">
-              Server-authoritative timeline
+            <div className="mt-5 pt-3 border-t-2 border-brand-border/10 flex items-center justify-between text-[11px] font-black text-brand-orange">
+              <span>Timeline Engine</span>
+              <span>Export as PNG</span>
             </div>
           </motion.div>
         </div>
@@ -352,11 +317,11 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-8 p-4 bg-white border-2 border-brand-border rounded-2xl shadow-[0_4px_0px_#13141f] flex flex-wrap items-center justify-center gap-4 text-xs font-black text-brand-border select-none"
+          className="mt-8 p-4 bg-white border-3 border-brand-border rounded-2xl shadow-[0_4px_0px_#13141f] flex flex-wrap items-center justify-center gap-4 text-xs font-black text-brand-border select-none"
         >
           <div className="flex items-center gap-1.5 text-brand-blue">
             <Command className="w-4 h-4" />
-            <span>Keyboard Shortcuts:</span>
+            <span>Power User Shortcuts:</span>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <span><kbd className="px-1.5 py-0.5 bg-brand-bg rounded border-2 border-brand-border font-mono text-[10px]">P</kbd> Pen</span>
@@ -370,11 +335,59 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
+      {/* ── Frequently Asked Questions (Interactive Accordion) ── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-14 border-t-2 border-brand-border/10">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="px-3.5 py-1 bg-brand-orange/10 border-2 border-brand-orange/30 text-brand-orange text-xs font-black rounded-full uppercase tracking-wider mb-3 inline-block">
+            Frequently Asked Questions
+          </span>
+          <h3 className="text-3xl font-black text-[#13141f] tracking-tight mt-1">
+            Everything you need to know
+          </h3>
+          <p className="text-sm font-bold text-brand-border/60 mt-2">
+            Clear, straightforward answers about how InkLink works under the hood.
+          </p>
+        </div>
+
+        <FaqAccordion />
+      </section>
+
+      {/* ── Final Call to Action ── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <motion.div
+          whileHover={{ y: -4 }}
+          transition={{ type: "spring", stiffness: 350, damping: 25 }}
+          className="skribbl-card bg-gradient-to-r from-brand-blue to-[#4f46e5] text-white p-8 sm:p-12 rounded-[32px] text-center shadow-[0_10px_0px_#13141f] border-4 border-[#13141f]"
+        >
+          <h3 className="text-3xl sm:text-4xl font-black mb-3">
+            Ready to sketch ideas together?
+          </h3>
+          <p className="text-white/80 text-sm sm:text-base font-bold max-w-xl mx-auto mb-6">
+            No registration, no credit card, no waiting. Spin up a room in 3 seconds and send the link to your team.
+          </p>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="px-6 py-3.5 bg-white text-brand-border font-black text-sm rounded-2xl border-3 border-brand-border shadow-[0_4px_0px_#13141f] hover:bg-[#ffdf00] transition-colors cursor-pointer"
+          >
+            Create Your First Room ↑
+          </button>
+        </motion.div>
+      </section>
+
       {/* ── Footer ─────────────────────────────────────────────── */}
       <footer className="w-full border-t-2 border-brand-border/10 py-6 px-4 text-center select-none bg-white">
-        <p className="text-brand-border/60 text-xs font-black">
-          InkLink — Open Collaborative Whiteboard · Next.js · Motion.dev · Socket.IO · TypeScript
-        </p>
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-black text-brand-border/60">
+          <div className="flex items-center gap-2">
+            <span>InkLink Whiteboard</span>
+            <span>•</span>
+            <span>Built with Next.js, Motion.dev & Socket.IO</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-brand-border">
+            <span>Crafted with</span>
+            <Heart className="w-3.5 h-3.5 text-brand-pink fill-brand-pink" />
+            <span>for creative teams</span>
+          </div>
+        </div>
       </footer>
     </main>
   );
