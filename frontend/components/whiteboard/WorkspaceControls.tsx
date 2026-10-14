@@ -63,15 +63,8 @@ export function WorkspaceControls({
               </button>
             </div>
 
-            {/* Canvas Schematic Representation with artifact dots & viewport indicator */}
+            {/* Canvas Schematic Representation with viewport indicator */}
             <div className="relative w-full h-20 bg-slate-100/80 rounded-lg border border-slate-200/60 overflow-hidden">
-              {/* Colored note representations */}
-              <span className="absolute left-4 top-3 w-4 h-3 bg-amber-300 rounded-[2px] opacity-85 shadow-2xs" />
-              <span className="absolute left-14 top-4 w-5 h-3 bg-rose-300 rounded-[2px] opacity-85 shadow-2xs" />
-              <span className="absolute left-13 top-9 w-6 h-5 bg-indigo-300 rounded-[2px] opacity-85 shadow-2xs" />
-              <span className="absolute left-26 top-4 w-4 h-3 bg-purple-300 rounded-[2px] opacity-85 shadow-2xs" />
-              <span className="absolute left-24 top-10 w-5 h-3 bg-emerald-300 rounded-[2px] opacity-85 shadow-2xs" />
-
               {/* Viewport active indicator */}
               <div className="absolute inset-x-2 inset-y-1 border-2 border-indigo-600 bg-indigo-500/10 rounded-[3px] cursor-move" />
             </div>

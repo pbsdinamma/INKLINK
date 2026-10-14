@@ -13,7 +13,6 @@ import { getSocket } from "@/lib/socket";
 import type { RoomState, Stroke, User, ChatMessage, Tool } from "@/types";
 
 import { WorkspaceControls } from "@/components/whiteboard/WorkspaceControls";
-import { StickyNotesLayer } from "@/components/whiteboard/StickyNotesLayer";
 import { InkLinkLogo } from "@/components/ui/InkLinkLogo";
 import {
   DEFAULT_COLOR,
@@ -497,8 +496,6 @@ export default function RoomPage({ params }: RoomPageProps) {
           onReplayEnd={handleReplayEnd}
         />
 
-        {/* Level 1: Interactive Draggable Sticky Notes & Diagrams from Stitch */}
-        <StickyNotesLayer />
 
         {/* Active Replay Floating Pill */}
         <AnimatePresence>
