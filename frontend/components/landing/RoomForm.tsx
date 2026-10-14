@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, Users } from "lucide-react";
 
-export function RoomForm() {
+export function RoomForm({ className }: { className?: string } = {}) {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [joinCode, setJoinCode] = useState("");
@@ -38,23 +38,11 @@ export function RoomForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto relative select-none">
-      {/* Playful Floating Badges */}
-      <div className="flex flex-wrap justify-center gap-3 mb-6">
-        <div className="flex items-center gap-1.5 bg-white border-3 border-[#13141f] rounded-full px-4 py-1.5 text-xs font-black shadow-[0_3px_0px_#13141f] text-[#1e6bf1]">
-          <Sparkles className="w-3.5 h-3.5 shrink-0" />
-          Real-time Drawing
-        </div>
-        <div className="flex items-center gap-1.5 bg-white border-3 border-[#13141f] rounded-full px-4 py-1.5 text-xs font-black shadow-[0_3px_0px_#13141f] text-[#ff7e1b]">
-          <Users className="w-3.5 h-3.5 shrink-0" />
-          Multiplayer Rooms
-        </div>
-      </div>
-
+    <div className={className ?? "w-full relative select-none"}>
       {/* Main card */}
       <motion.div
         layout
-        className="bg-white border-4 border-[#13141f] rounded-[24px] p-8 shadow-[0_8px_0px_#13141f] relative overflow-hidden"
+        className="bg-white border-4 border-[#13141f] rounded-[24px] p-6 sm:p-7 shadow-[0_8px_0px_#13141f] relative overflow-hidden"
       >
         {/* Playful Tab Toggles */}
         <div className="flex bg-[#f3f7ff] border-3 border-[#13141f] rounded-2xl p-1 mb-6 relative">
