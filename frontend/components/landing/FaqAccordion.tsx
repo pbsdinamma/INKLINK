@@ -2,28 +2,24 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const FAQS = [
   {
-    q: "Is InkLink really free with zero sign-up?",
-    a: "Yes! There are no accounts, subscriptions, or login forms. Simply pick a nickname, hit 'Create Room', and you get an instant collaborative canvas link you can share with anyone.",
+    q: "Is it really free and without account signup?",
+    a: "Yes! InkLink assigns dynamic cryptographic rooms instantly. No emails, no passwords, no onboarding walls. Share the unique room link with colleagues and begin drawing instantly together.",
   },
   {
-    q: "Can multiple people draw simultaneously without lag?",
-    a: "Absolutely. InkLink uses WebSockets with lightweight point delta compression running at 60 FPS. Every stroke point is synchronized in real-time as your pen glides across the canvas.",
+    q: "How does the real-time sync keep latency under 16ms?",
+    a: "We transmit compressed vector coordinate deltas over low-overhead WebSockets with client-side spline prediction. Even on slower networks, line strokes render smoothly at full display refresh rate.",
   },
   {
-    q: "How does the Canvas Replay feature work?",
-    a: "The server maintains an immutable timeline of every stroke created in the room. When you click 'Replay', InkLink rewinds the canvas and animates every single stroke in chronological sequence like a time machine.",
+    q: "Can I export high-resolution vector images or presentations?",
+    a: "You can export transparent PNGs, SVGs, or trigger Slide Mode for instant frame-by-frame client walkthroughs and timeline replays right in any modern web browser.",
   },
   {
-    q: "Does it work on mobile and tablet touchscreens?",
-    a: "Yes! The canvas is fully responsive and supports touch events with native pointer capture. You can sketch with your finger, Apple Pencil, or stylus on phones and iPads without accidental page scrolling.",
-  },
-  {
-    q: "How do I save or share my finished artwork?",
-    a: "Click the 'Download' icon in the toolbar (or press [D]) to instantly export the whiteboard as a high-resolution, transparent-ready PNG image with a clean white canvas background.",
+    q: "Does it work smoothly on tablets and stylus devices?",
+    a: "Full native touch and Apple Pencil / stylus pressure support is built right into the rendering pipeline with palm rejection and variable line weight dynamics.",
   },
 ];
 
@@ -35,33 +31,27 @@ export function FaqAccordion() {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-3">
+    <div className="space-y-4">
       {FAQS.map((faq, idx) => {
         const isOpen = openIndex === idx;
         return (
-          <motion.div
+          <div
             key={faq.q}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ type: "spring", stiffness: 350, damping: 25, delay: idx * 0.04 }}
-            className="skribbl-card overflow-hidden bg-white border-3 border-[#13141f] rounded-2xl shadow-[0_4px_0px_#13141f] transition-all"
+            className="bg-white rounded-2xl border-2 border-slate-900 p-6 shadow-brutal transition-all"
           >
             <button
               type="button"
               onClick={() => toggle(idx)}
-              className="w-full px-5 py-4 flex items-center justify-between text-left cursor-pointer hover:bg-brand-bg/40 transition-colors"
+              className="w-full flex items-center justify-between font-bold text-base sm:text-lg text-slate-900 cursor-pointer text-left"
             >
-              <span className="text-sm sm:text-base font-black text-[#13141f]">
-                {faq.q}
-              </span>
-              <motion.div
+              <span>{faq.q}</span>
+              <motion.span
                 animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ type: "spring", stiffness: 450, damping: 20 }}
-                className="w-6 h-6 rounded-lg bg-brand-bg border-2 border-brand-border flex items-center justify-center shrink-0 ml-3 text-brand-blue"
+                transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 shrink-0 ml-4"
               >
                 <ChevronDown className="w-4 h-4" />
-              </motion.div>
+              </motion.span>
             </button>
             <AnimatePresence initial={false}>
               {isOpen && (
@@ -69,16 +59,16 @@ export function FaqAccordion() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  transition={{ duration: 0.2 }}
                   className="overflow-hidden"
                 >
-                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm font-bold text-brand-border/70 leading-relaxed border-t-2 border-brand-border/10">
+                  <p className="mt-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-4">
                     {faq.a}
-                  </div>
+                  </p>
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
         );
       })}
     </div>
