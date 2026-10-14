@@ -206,17 +206,23 @@ export function Canvas({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full overflow-hidden bg-white border-3 border-brand-border rounded-[24px] shadow-[0_8px_0px_#13141f]"
-      style={{
-        backgroundImage: `radial-gradient(circle, rgba(19, 20, 31, 0.07) 1.2px, transparent 1.2px)`,
-        backgroundSize: "24px 24px",
-      }}
+      className="relative w-full h-full overflow-hidden bg-dot-matrix cursor-default"
     >
+      {/* Ambient Grid & Metric Subdivisions SVG Overlay from Stitch */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern height="100" id="grid-major" patternUnits="userSpaceOnUse" width="100">
+            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#e0dbe3" strokeDasharray="2 3" strokeWidth="0.8" />
+          </pattern>
+        </defs>
+        <rect fill="url(#grid-major)" height="100%" width="100%" />
+      </svg>
+
       <canvas
         ref={canvasRef}
         width={CANVAS_WIDTH}
         height={CANVAS_HEIGHT}
-        className={cn("w-full h-full", cursorStyle)}
+        className={cn("w-full h-full relative z-0", cursorStyle)}
         onPointerDown={isReplaying ? undefined : handlePointerDown}
         onPointerMove={isReplaying ? undefined : handlePointerMove}
         onPointerUp={isReplaying ? undefined : handlePointerUp}

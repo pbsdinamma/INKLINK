@@ -30,12 +30,28 @@
     overflow-x: hidden;
     
     /* Subtle modern canvas grid */
-    background-color: #f8fafc; 
+    background-color: #faf9fb; 
     background-image: 
       linear-gradient(rgba(19, 20, 31, 0.025) 1px, transparent 1px),
       linear-gradient(90deg, rgba(19, 20, 31, 0.025) 1px, transparent 1px);
     background-size: 24px 24px;
     background-position: center;
+  }
+
+  /* Stitch Design System - Dot Matrix Canvas */
+  .bg-dot-matrix {
+    background-color: #faf9fb;
+    background-image: radial-gradient(#d3cfd8 1.15px, transparent 1.15px);
+    background-size: 20px 20px;
+  }
+
+  /* Custom scrollbar for chat panel */
+  .chat-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+  .chat-scroll::-webkit-scrollbar-thumb {
+    background-color: #e4e1e6;
+    border-radius: 9999px;
   }
 
   /* Custom scrollbar */

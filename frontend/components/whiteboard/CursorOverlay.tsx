@@ -57,38 +57,38 @@ export function CursorOverlay({
             >
               {/* Cursor arrow */}
               <svg
-                width="24"
-                height="24"
-                viewBox="0 0 20 20"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
                 fill="none"
                 style={{ overflow: "visible" }}
               >
                 <path
-                  d="M4 2L18 10L11 12L8 18L4 2Z"
+                  d="M4.5 2.5L20 11.5L12 14.5L8.5 21.5L4.5 2.5Z"
                   fill={cursor.color}
-                  stroke="#13141f"
-                  strokeWidth="2.5"
+                  stroke="#ffffff"
+                  strokeWidth="1.5"
                   strokeLinejoin="round"
                 />
               </svg>
-              {/* Name label */}
-              <g transform="translate(16, 16)">
+              {/* Name label pill */}
+              <g transform="translate(14, 14)">
                 <rect
-                  rx="6"
-                  ry="6"
-                  fill="#13141f"
-                  x="-4"
-                  y="-11"
-                  width={cursor.username.length * 7 + 14}
+                  rx="9"
+                  ry="9"
+                  fill={cursor.color}
+                  x="-2"
+                  y="-10"
+                  width={cursor.username.length * 6.8 + 16}
                   height="18"
                 />
                 <text
                   fill="white"
-                  fontSize="9"
+                  fontSize="9.5"
                   fontFamily="var(--font-sans), sans-serif"
-                  fontWeight="900"
-                  dx="2"
-                  dy="1"
+                  fontWeight="700"
+                  dx="6"
+                  dy="2.5"
                 >
                   {cursor.username}
                 </text>

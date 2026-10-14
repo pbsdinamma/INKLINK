@@ -13,6 +13,7 @@ import { getSocket } from "@/lib/socket";
 import type { RoomState, Stroke, User, ChatMessage, Tool } from "@/types";
 
 import { WorkspaceControls } from "@/components/whiteboard/WorkspaceControls";
+import { StickyNotesLayer } from "@/components/whiteboard/StickyNotesLayer";
 import { InkLinkLogo } from "@/components/ui/InkLinkLogo";
 import {
   DEFAULT_COLOR,
@@ -33,6 +34,8 @@ import {
   Dices,
   Download,
   Share2,
+  Undo2,
+  Redo2,
 } from "lucide-react";
 
 import { Toaster, toast } from "react-hot-toast";
@@ -314,323 +317,228 @@ export default function RoomPage({ params }: RoomPageProps) {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-brand-bg text-brand-border overflow-hidden p-4 gap-4 relative">
-      {/* Playful, thick-bordered Hot Toast */}
+    <div className="fixed inset-0 w-full h-full overflow-hidden select-none bg-[#faf9fb]">
+      {/* Toast notifications */}
       <Toaster
         position="top-center"
         toastOptions={{
           style: {
             background: "#ffffff",
-            color: "#13141f",
-            border: "3px solid #13141f",
-            borderRadius: "16px",
-            boxShadow: "0 6px 0px #13141f",
-            fontWeight: "900",
+            color: "#1e1b4b",
+            border: "1px solid #e2e8f0",
+            borderRadius: "12px",
+            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
+            fontWeight: "700",
             fontSize: "13px",
             fontFamily: "var(--font-sans)",
           },
         }}
       />
 
-      {/* ─── Top Navbar ──────────────────────────────────────── */}
-      <motion.header
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 240, damping: 20 }}
-        className="skribbl-card flex items-center justify-between px-5 py-3 select-none shrink-0 bg-white z-10"
-      >
-        {/* Left: Brand logo + Copy invite link */}
-        <div className="flex items-center gap-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => router.push("/")}
-            className="flex items-center gap-2.5 cursor-pointer group select-none"
-            title="Leave Room & Back to Home"
-          >
-            <InkLinkLogo size={32} priority />
-            <span className="hidden sm:inline text-base font-black text-brand-border select-none">
-              Ink<span className="text-brand-blue">Link</span>
-            </span>
-          </motion.button>
+      {/* ── Top Floating Navigation Bar (Stitch Design Spec) ── */}
+      <header className="fixed top-4 left-4 right-4 rounded-xl z-50 bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-md">
+        <div className="flex justify-between items-center w-full px-4 py-2.5">
+          {/* Brand & Document Breadcrumbs */}
+          <div className="flex items-center gap-3">
+            {/* Logo / Quill Icon */}
+            <div className="flex items-center gap-2 pr-3 border-r border-slate-200">
+              <InkLinkLogo size={30} priority />
+              <span className="text-base font-extrabold text-indigo-600 tracking-tight">InkLink</span>
+            </div>
+            {/* Breadcrumbs & Document Title */}
+            <nav className="flex items-center gap-2 text-xs font-semibold">
+              <button
+                onClick={() => router.push("/")}
+                className="text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+              >
+                Workspace
+              </button>
+              <span className="text-slate-300">/</span>
+              <span className="text-slate-500">Room</span>
+              <span className="text-slate-300">/</span>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100">
+                <span className="text-slate-800 font-bold font-mono uppercase">{roomId}</span>
+                <button
+                  onClick={handleCopyRoomId}
+                  className="hover:text-indigo-600 transition-colors cursor-pointer p-0.5"
+                  title="Copy Invite Link"
+                >
+                  {copied ? (
+                    <Check className="w-3 h-3 text-emerald-500" />
+                  ) : (
+                    <Copy className="w-3 h-3 text-slate-400" />
+                  )}
+                </button>
+              </div>
+            </nav>
+            {/* Cloud Sync Badge */}
+            <div className="hidden sm:flex items-center gap-1.5 pl-2 text-emerald-600 text-xs font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Saved to Cloud</span>
+            </div>
+          </div>
 
-          <motion.button
-            whileHover={{ scale: 1.04, y: -1 }}
-            whileTap={{ scale: 0.96 }}
-            transition={{ type: "spring", stiffness: 450, damping: 16 }}
-            onClick={handleCopyRoomId}
-            className="skribbl-button flex items-center gap-2 bg-brand-bg hover:bg-brand-bg/85 px-3 py-1.5 text-xs font-black select-none shadow-[0_3px_0px_#13141f] cursor-pointer"
-            title="Copy Invite Link"
-          >
-            <span className="font-mono tracking-wider text-brand-blue uppercase">
-              {roomId}
-            </span>
-            {copied ? (
-              <Check className="w-3.5 h-3.5 text-brand-green shrink-0" />
-            ) : (
-              <Copy className="w-3.5 h-3.5 text-brand-blue shrink-0" />
-            )}
-          </motion.button>
-        </div>
-
-        {/* Center: Realtime Connection Badge */}
-        <div className="flex items-center gap-2">
-          {reconnecting ? (
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: [1, 1.03, 1] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-              className="flex items-center gap-1.5 text-brand-orange text-xs font-black bg-brand-orange/5 border-2 border-brand-orange/20 rounded-full px-3 py-1"
+          {/* Center History Undo/Redo & Zoom Quick Actions */}
+          <div className="hidden lg:flex items-center gap-1 bg-slate-100/90 px-2 py-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+            <button
+              onClick={handleUndo}
+              disabled={!canUndo}
+              className="p-1 rounded text-slate-500 hover:text-slate-900 disabled:opacity-30 transition-colors cursor-pointer"
+              title="Undo (Ctrl+Z)"
             >
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Reconnecting...
-            </motion.div>
-          ) : connected ? (
-            <div className="flex items-center gap-1.5 text-brand-green text-xs font-black bg-brand-green/5 border-2 border-brand-green/20 rounded-full px-3 py-1">
-              <span className="w-2 h-2 rounded-full bg-brand-green" />
-              <Wifi className="w-3.5 h-3.5" />
-              Sync Active
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5 text-brand-pink text-xs font-black bg-brand-pink/5 border-2 border-brand-pink/20 rounded-full px-3 py-1">
-              <WifiOff className="w-3.5 h-3.5" />
-              Offline
-            </div>
-          )}
-        </div>
+              <Undo2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleRedo}
+              disabled={!canRedo}
+              className="p-1 rounded text-slate-500 hover:text-slate-900 disabled:opacity-30 transition-colors cursor-pointer"
+              title="Redo (Ctrl+Y)"
+            >
+              <Redo2 className="w-4 h-4" />
+            </button>
+            <span className="w-px h-4 bg-slate-200 mx-1" />
+            <span className="font-mono text-xs px-1 text-slate-700 font-bold">100%</span>
+          </div>
 
-        {/* Right: User list and chat controls */}
-        <div className="flex items-center gap-2">
-          {/* Overlapping Player Avatars preview */}
-          {users.length > 0 && (
-            <div className="hidden md:flex items-center -space-x-2 mr-1">
-              {users.slice(0, 3).map((u) => (
+          {/* Trailing Action Cluster & Multiplayer Stack */}
+          <div className="flex items-center gap-2.5">
+            {/* Live Collaborators Avatar Pile */}
+            <div className="flex items-center -space-x-2 mr-1">
+              {users.slice(0, 4).map((u) => (
                 <div
                   key={u.id}
-                  className="w-7 h-7 rounded-full border-2 border-[#13141f] flex items-center justify-center text-[10px] font-black text-white shadow-[0_1.5px_0px_#13141f]"
+                  className="w-8 h-8 rounded-full border-2 border-white text-white flex items-center justify-center font-bold text-xs ring-2 ring-indigo-500 shadow-xs"
                   style={{ backgroundColor: u.color }}
                   title={u.username}
                 >
-                  {u.username.charAt(0).toUpperCase()}
+                  {u.username.slice(0, 2).toUpperCase()}
                 </div>
               ))}
-              {users.length > 3 && (
-                <div className="w-7 h-7 rounded-full border-2 border-[#13141f] bg-white text-brand-border flex items-center justify-center text-[9px] font-black shadow-[0_1.5px_0px_#13141f]">
-                  +{users.length - 3}
+              {users.length > 4 && (
+                <div className="w-8 h-8 rounded-full border-2 border-white bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center shadow-xs">
+                  +{users.length - 4}
                 </div>
               )}
             </div>
-          )}
 
-          <motion.button
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 450, damping: 16 }}
-            onClick={() => setShowUsers((v) => !v)}
-            className={`skribbl-button relative flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-black transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer ${
-              showUsers
-                ? "bg-brand-blue text-white hover:bg-brand-blue/90"
-                : "bg-white text-brand-border hover:bg-brand-bg"
-            }`}
-          >
-            <Users className="w-3.5 h-3.5 shrink-0" />
-            <span className="hidden sm:inline">Players</span>
-            <span
-              className={`rounded-full px-1.5 py-0.5 text-[10px] font-black border ${
-                showUsers
-                  ? "bg-white text-brand-blue border-white/20"
-                  : "bg-brand-bg text-brand-border border-brand-border/10"
+            {/* Chat toggle */}
+            <button
+              onClick={handleToggleChat}
+              className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                showChat
+                  ? "bg-indigo-50 text-indigo-600 border-indigo-200"
+                  : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
               }`}
             >
-              {users.length}
-            </span>
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 450, damping: 16 }}
-            onClick={handleToggleChat}
-            className={`skribbl-button relative flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-black transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer ${
-              showChat
-                ? "bg-brand-blue text-white hover:bg-brand-blue/90"
-                : "bg-white text-brand-border hover:bg-brand-bg"
-            }`}
-          >
-            <MessageSquare className="w-3.5 h-3.5 shrink-0" />
-            <span className="hidden sm:inline">Chat</span>
-            <AnimatePresence>
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Chat</span>
               {unreadCount > 0 && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                  className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-brand-pink text-white text-[9px] font-black border-2 border-brand-border rounded-full flex items-center justify-center"
-                >
+                <span className="w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] flex items-center justify-center font-black">
                   {unreadCount}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </motion.button>
-
-          {/* Export Canvas as PNG (Stitch header action) */}
-          <motion.button
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 450, damping: 16 }}
-            onClick={() => downloadRef.current()}
-            className="skribbl-button hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-black bg-white hover:bg-brand-bg transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer"
-            title="Export Canvas as PNG"
-          >
-            <Download className="w-3.5 h-3.5 text-brand-border" />
-            <span>Export</span>
-          </motion.button>
-
-          {/* Share Room Button (Stitch prominent action) */}
-          <motion.button
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 450, damping: 16 }}
-            onClick={handleCopyRoomId}
-            className="skribbl-button flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-black bg-brand-blue text-white hover:bg-brand-blue/90 transition-colors shadow-[0_3px_0px_#13141f] cursor-pointer"
-            title="Share Room Link"
-          >
-            {copied ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-brand-green" />
-                <span>Copied!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Share</span>
-              </>
-            )}
-          </motion.button>
-        </div>
-      </motion.header>
-
-      {/* ─── Main Room Workspace ─────────────────────────────── */}
-      <div className="flex-1 flex gap-4 overflow-hidden relative">
-        {/* Left Sidebar: Users */}
-        <AnimatePresence mode="popLayout">
-          {showUsers && (
-            <motion.div
-              initial={{ x: -280, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -280, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 280, damping: 26 }}
-              className="w-72 shrink-0 h-full hidden lg:block"
-            >
-              <UserList users={users} currentUserId={currentUserId} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Center: Drawing Canvas */}
-        <div className="flex-1 relative h-[calc(100%-80px)] mb-[80px] overflow-hidden">
-          <Canvas
-            socket={socket}
-            initialStrokes={strokes}
-            color={color}
-            brushSize={brushSize}
-            tool={tool}
-            onStrokesChange={setStrokes}
-            onUndoRedoReady={(undo, redo) => {
-              undoRef.current = undo;
-              redoRef.current = redo;
-            }}
-            onClearReady={(clear) => {
-              clearRef.current = clear;
-            }}
-            onDownloadReady={(download) => {
-              downloadRef.current = download;
-            }}
-            onReplayReady={(startReplay, stopReplay) => {
-              startReplayRef.current = startReplay;
-              stopReplayRef.current = stopReplay;
-            }}
-            onReplayEnd={handleReplayEnd}
-          />
-
-          {/* Active Replay Floating Banner */}
-          <AnimatePresence>
-            {isReplaying && (
-              <motion.div
-                initial={{ opacity: 0, y: -24, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -24, scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 350, damping: 22 }}
-                className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 px-4 py-2 bg-[#13141f] text-white rounded-2xl shadow-[0_6px_0px_rgba(0,0,0,0.3)] border-2 border-[#13141f] select-none pointer-events-auto"
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-brand-orange animate-ping" />
-                <span className="text-xs font-black tracking-wide">
-                  Replaying canvas history...
                 </span>
-                <button
-                  onClick={handleToggleReplay}
-                  className="text-[10px] font-black uppercase px-2.5 py-1 bg-brand-orange text-white rounded-lg hover:bg-brand-orange/90 cursor-pointer shadow-[0_1.5px_0px_rgba(0,0,0,0.4)] transition-transform active:scale-95"
-                >
-                  Stop
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              )}
+            </button>
 
-          {/* Stitch Workspace Controls (Zoom & Fullscreen) */}
-          <WorkspaceControls />
-
-          {/* Subtle Floating Keyboard Shortcuts Pill */}
-          <div className="absolute bottom-3 left-48 hidden xl:flex items-center gap-3 px-3 py-1.5 bg-white/80 backdrop-blur-md border-2 border-brand-border/15 rounded-xl text-[10px] font-black text-brand-border/50 select-none shadow-[0_2px_0px_rgba(19,20,31,0.04)] pointer-events-none z-20">
-            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">P</kbd> Pen</span>
-            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">E</kbd> Eraser</span>
-            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">Ctrl+Z</kbd> Undo</span>
-            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">D</kbd> Save</span>
-            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">R</kbd> Replay</span>
-          </div>
-
-          {/* Sockets Connecting Overlay */}
-          {!connected && !reconnecting && (
-            <div className="absolute inset-0 bg-brand-bg/85 backdrop-blur-sm flex items-center justify-center z-30 rounded-[24px] border-3 border-brand-border">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 350, damping: 20 }}
-                className="text-center p-6 bg-white border-3 border-brand-border rounded-3xl shadow-[0_6px_0px_#13141f] max-w-xs"
-              >
-                <Loader2 className="w-8 h-8 text-brand-blue animate-spin mx-auto mb-3" />
-                <p className="text-brand-border font-black text-sm">
-                  Connecting to canvas...
-                </p>
-              </motion.div>
-            </div>
-          )}
-        </div>
-
-        {/* Right Sidebar: Chat */}
-        <AnimatePresence mode="popLayout">
-          {showChat && (
-            <motion.div
-              initial={{ x: 280, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 280, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 280, damping: 26 }}
-              className="w-72 shrink-0 h-full hidden md:block"
+            {/* Secondary Action: Export */}
+            <button
+              onClick={() => downloadRef.current()}
+              className="px-3.5 py-1.5 rounded-lg border border-slate-200/80 bg-white text-slate-800 hover:bg-slate-50 transition-all text-xs font-bold active:scale-95 flex items-center gap-1.5 shadow-2xs cursor-pointer"
+              title="Export Canvas as PNG"
             >
-              <ChatPanel
-                socket={socket}
-                messages={liveChatMessages}
-                onSendMessage={sendMessage}
-                isOpen={showChat}
-                onClose={handleToggleChat}
-              />
+              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <span className="hidden sm:inline">Export</span>
+            </button>
+
+            {/* Primary Action: Share */}
+            <button
+              onClick={handleCopyRoomId}
+              className="px-4 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-all text-xs font-bold active:scale-95 flex items-center gap-1.5 shadow-xs cursor-pointer"
+              title="Share Room Link"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-300" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* ── Level 0: Fullscreen Infinite Canvas ── */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <Canvas
+          socket={socket}
+          initialStrokes={strokes}
+          color={color}
+          brushSize={brushSize}
+          tool={tool}
+          onStrokesChange={setStrokes}
+          onUndoRedoReady={(undo, redo) => {
+            undoRef.current = undo;
+            redoRef.current = redo;
+          }}
+          onClearReady={(clear) => {
+            clearRef.current = clear;
+          }}
+          onDownloadReady={(download) => {
+            downloadRef.current = download;
+          }}
+          onReplayReady={(startReplay, stopReplay) => {
+            startReplayRef.current = startReplay;
+            stopReplayRef.current = stopReplay;
+          }}
+          onReplayEnd={handleReplayEnd}
+        />
+
+        {/* Level 1: Interactive Draggable Sticky Notes & Diagrams from Stitch */}
+        <StickyNotesLayer />
+
+        {/* Active Replay Floating Pill */}
+        <AnimatePresence>
+          {isReplaying && (
+            <motion.div
+              initial={{ opacity: 0, y: -24, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -24, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 350, damping: 22 }}
+              className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 select-none pointer-events-auto"
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+              <span className="text-xs font-bold tracking-wide">
+                Replaying canvas history...
+              </span>
+              <button
+                onClick={handleToggleReplay}
+                className="text-[10px] font-bold uppercase px-2.5 py-1 bg-amber-500 text-white rounded-lg hover:bg-amber-600 cursor-pointer shadow-xs transition-transform active:scale-95"
+              >
+                Stop
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Connecting Overlay */}
+        {!connected && !reconnecting && (
+          <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="text-center p-6 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-xs">
+              <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mx-auto mb-3" />
+              <p className="text-slate-800 font-bold text-sm">
+                Connecting to canvas...
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* ─── Bottom Floating Toolbar (Viewport Fixed Centered) ─── */}
+      {/* ── Level 4 Floating Docks ── */}
+      {/* Floating Bottom Toolbar */}
       <Toolbar
         color={color}
         brushSize={brushSize}
@@ -646,6 +554,21 @@ export default function RoomPage({ params }: RoomPageProps) {
         onDownload={() => downloadRef.current()}
         onReplay={handleToggleReplay}
         isReplaying={isReplaying}
+      />
+
+      {/* Floating Bottom-Left Mini-Map & Zoom Controls */}
+      <WorkspaceControls />
+
+      {/* Floating Right Collaboration Dock */}
+      <ChatPanel
+        isOpen={showChat}
+        onClose={handleToggleChat}
+        socket={socket}
+        messages={liveChatMessages}
+        onSendMessage={sendMessage}
+        users={users}
+        currentUserId={currentUserId}
+        onInvite={handleCopyRoomId}
       />
     </div>
   );
