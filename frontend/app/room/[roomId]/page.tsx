@@ -13,6 +13,7 @@ import { getSocket } from "@/lib/socket";
 import type { RoomState, Stroke, User, ChatMessage, Tool } from "@/types";
 
 import { WorkspaceControls } from "@/components/whiteboard/WorkspaceControls";
+import { InkLinkLogo } from "@/components/ui/InkLinkLogo";
 import {
   DEFAULT_COLOR,
   DEFAULT_BRUSH_SIZE,
@@ -254,9 +255,9 @@ export default function RoomPage({ params }: RoomPageProps) {
           className="relative w-full max-w-md text-center z-10"
         >
           <div className="skribbl-card bg-white p-8 relative overflow-hidden text-center shadow-[0_8px_0px_#13141f]">
-            {/* Consistent Brand Pencil Icon */}
-            <div className="w-12 h-12 bg-brand-blue rounded-2xl flex items-center justify-center text-white shadow-[0_3px_0px_#13141f] border-2 border-brand-border mx-auto mb-4">
-              <Pencil className="w-6 h-6" />
+            {/* InkLink Brand Logo */}
+            <div className="mx-auto mb-4 flex justify-center">
+              <InkLinkLogo size={56} priority />
             </div>
 
             <h2 className="text-2xl font-black mb-1 text-brand-border select-none">
@@ -347,9 +348,7 @@ export default function RoomPage({ params }: RoomPageProps) {
             className="flex items-center gap-2.5 cursor-pointer group select-none"
             title="Leave Room & Back to Home"
           >
-            <div className="w-8 h-8 bg-brand-blue rounded-xl flex items-center justify-center text-white shadow-[0_2px_0px_#13141f] border-2 border-brand-border">
-              <Pencil className="w-4 h-4" />
-            </div>
+            <InkLinkLogo size={32} priority />
             <span className="hidden sm:inline text-base font-black text-brand-border select-none">
               Ink<span className="text-brand-blue">Link</span>
             </span>

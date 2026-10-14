@@ -14,7 +14,10 @@ export const metadata: Metadata = {
   description:
     "Draw, sketch, and create together in real time. A multiplayer whiteboard inspired by Skribbl.io powered by Socket.IO and HTML5 Canvas.",
   keywords: ["whiteboard", "collaborative", "drawing", "real-time", "multiplayer", "skribbl", "inklink"],
-  authors: [{ name: "InkLink" }],
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
   openGraph: {
     title: "InkLink",
     description: "Real-time collaborative whiteboard",
