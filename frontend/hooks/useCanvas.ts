@@ -205,19 +205,50 @@ export function useCanvas({
       dirtyRef.current = true;
     };
 
+    const handleRemoteClear = () => {
+      activeStrokesRef.current.clear();
+      strokesRef.current = [];
+      setStrokes([]);
+      dirtyRef.current = true;
+      onStrokesChangeRef.current?.([]);
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          renderStrokes(ctx, [], CANVAS_WIDTH, CANVAS_HEIGHT);
+        }
+      }
+    };
+
     socket.on("stroke:start", handleRemoteStart);
     socket.on("stroke:point", handleRemotePoint);
     socket.on("stroke:end", handleRemoteEnd);
+    socket.on("board:clear", handleRemoteClear);
 
     return () => {
       socket.off("stroke:start", handleRemoteStart);
       socket.off("stroke:point", handleRemotePoint);
       socket.off("stroke:end", handleRemoteEnd);
+      socket.off("board:clear", handleRemoteClear);
     };
-  }, [socket]);
+  }, [socket, canvasRef]);
 
   // ─── Board actions ────────────────────────────────────────
-  const clearBoard = useCallback(() => socket?.emit("board:clear"), [socket]);
+  const clearBoard = useCallback(() => {
+    activeStrokesRef.current.clear();
+    strokesRef.current = [];
+    setStrokes([]);
+    dirtyRef.current = true;
+    onStrokesChangeRef.current?.([]);
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        renderStrokes(ctx, [], CANVAS_WIDTH, CANVAS_HEIGHT);
+      }
+    }
+    socket?.emit("board:clear");
+  }, [socket, canvasRef]);
   const undo = useCallback(() => socket?.emit("stroke:undo"), [socket]);
   const redo = useCallback(() => socket?.emit("stroke:redo"), [socket]);
 

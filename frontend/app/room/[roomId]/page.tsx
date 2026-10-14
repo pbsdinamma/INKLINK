@@ -141,6 +141,12 @@ export default function RoomPage({ params }: RoomPageProps) {
     setRedoCount((prev) => Math.max(0, prev - 1));
   }, []);
 
+  const handleClear = useCallback(() => {
+    clearRef.current();
+    setRedoCount(0);
+    toast("Board cleared", { icon: "🧹" });
+  }, []);
+
   // Increment unread count if chat panel is hidden
   const handleNewMessage = useCallback(() => {
     setShowChat((currentShowChat) => {
@@ -474,7 +480,7 @@ export default function RoomPage({ params }: RoomPageProps) {
         onToolChange={setTool}
         onUndo={handleUndo}
         onRedo={handleRedo}
-        onClear={() => clearRef.current()}
+        onClear={handleClear}
         onDownload={() => downloadRef.current()}
         onReplay={handleToggleReplay}
         isReplaying={isReplaying}

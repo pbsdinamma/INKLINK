@@ -104,9 +104,6 @@ export function Toolbar({
   onReplay,
   isReplaying,
 }: ToolbarProps) {
-  const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -136,17 +133,6 @@ export function Toolbar({
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [onToolChange, onUndo, onRedo, onBrushSizeChange, brushSize, onDownload]);
-
-  const handleClearClick = () => {
-    if (showClearConfirm) {
-      onClear();
-      setShowClearConfirm(false);
-      if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
-    } else {
-      setShowClearConfirm(true);
-      clearTimerRef.current = setTimeout(() => setShowClearConfirm(false), 2500);
-    }
-  };
 
   const previewSize = Math.max(4, Math.min(brushSize * 0.8, 32));
 
@@ -319,26 +305,15 @@ export function Toolbar({
             {isReplaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </IconBtn>
 
-          {/* Playful Clear with animated confirm */}
-          <AnimatePresence mode="wait">
-            <motion.button
-              key={showClearConfirm ? "confirm" : "idle"}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              onClick={handleClearClick}
-              className={cn(
-                "skribbl-button flex items-center gap-1 px-3 py-1 text-xs font-black select-none cursor-pointer h-9 shrink-0",
-                showClearConfirm
-                  ? "bg-brand-pink text-white border-brand-border shadow-[0_2.5px_0px_#13141f]"
-                  : "bg-white text-brand-pink hover:bg-brand-pink/5 hover:border-brand-border hover:shadow-[0_2.5px_0px_#13141f]"
-              )}
-              title={showClearConfirm ? "Click again to confirm clear" : "Clear Board"}
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-black">{showClearConfirm ? "Sure?" : "Clear"}</span>
-            </motion.button>
-          </AnimatePresence>
+          {/* Single-click immediate Clear */}
+          <button
+            onClick={onClear}
+            className="skribbl-button flex items-center gap-1.5 px-3 py-1.5 text-xs font-black select-none cursor-pointer h-9 shrink-0 bg-white text-brand-pink hover:bg-brand-pink hover:text-white border-2 border-brand-border transition-all duration-100 shadow-[0_2.5px_0px_#13141f] active:translate-y-0.5 active:shadow-[0_1px_0px_#13141f]"
+            title="Clear Board"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span className="text-[11px] font-black">Clear</span>
+          </button>
         </div>
       </motion.div>
     </div>
