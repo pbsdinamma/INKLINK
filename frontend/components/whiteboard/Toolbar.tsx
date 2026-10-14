@@ -13,6 +13,7 @@ import {
   Square,
   Undo2,
   Redo2,
+  Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -135,6 +136,7 @@ export function Toolbar({
   }, [onToolChange, onUndo, onRedo, onBrushSizeChange, brushSize, onDownload]);
 
   const previewSize = Math.max(4, Math.min(brushSize * 0.8, 32));
+  const isCustomColor = !PALETTE.some((c) => c.color.toLowerCase() === color.toLowerCase()) && tool !== TOOLS.ERASER;
 
   return (
     <div className="fixed bottom-6 left-0 right-0 z-40 flex justify-center pointer-events-none px-4 select-none">
@@ -143,7 +145,7 @@ export function Toolbar({
         animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 280, damping: 22 }}
         whileHover={{ y: -2 }}
-        className="pointer-events-auto max-w-[95vw] md:max-w-max bg-white/95 backdrop-blur-md border-4 border-brand-border rounded-[32px] shadow-[0_8px_0px_#13141f] px-5 py-3.5 flex flex-col md:flex-row items-center gap-3.5 md:gap-4 flex-nowrap overflow-x-auto md:overflow-visible scrollbar-none"
+        className="pointer-events-auto max-w-[95vw] md:max-w-max bg-white/95 backdrop-blur-xl border-4 border-brand-border rounded-[32px] shadow-[0_10px_0px_#13141f] px-5 py-3.5 flex flex-col md:flex-row items-center gap-3.5 md:gap-4 flex-nowrap overflow-x-auto md:overflow-visible scrollbar-none"
       >
         {/* ── Pod 1: Drawing Tools (Animated Sliding Pill) ──── */}
         <div className="relative flex items-center gap-1.5 p-1 bg-[#f3f7ff] border-2 border-brand-border rounded-2xl shrink-0 shadow-[inset_0_2px_4px_rgba(19,20,31,0.04)]">
@@ -169,8 +171,8 @@ export function Toolbar({
           </ToolBtn>
         </div>
 
-        {/* ── Pod 2: Color Swatches ──────────────────────────── */}
-        <div className="grid grid-cols-5 md:flex md:flex-row gap-1.5 p-1 bg-[#f8fafc] border-2 border-brand-border rounded-2xl shrink-0 shadow-[inset_0_2px_4px_rgba(19,20,31,0.02)]">
+        {/* ── Pod 2: Color Swatches + Custom Picker ──────────── */}
+        <div className="grid grid-cols-6 md:flex md:flex-row gap-1.5 p-1 bg-[#f8fafc] border-2 border-brand-border rounded-2xl shrink-0 shadow-[inset_0_2px_4px_rgba(19,20,31,0.02)] items-center">
           {PALETTE.map((c) => {
             const isSelected = color.toLowerCase() === c.color.toLowerCase() && tool !== TOOLS.ERASER;
             return (
@@ -203,6 +205,48 @@ export function Toolbar({
               </Tooltip>
             );
           })}
+
+          {/* Custom Color Swatch with Native Color Picker */}
+          <Tooltip content="Custom Color Picker">
+            <motion.label
+              whileHover={{ scale: 1.25, y: -2 }}
+              whileTap={{ scale: 0.85 }}
+              transition={{ type: "spring", stiffness: 450, damping: 14 }}
+              className={cn(
+                "w-7 h-7 rounded-full border-2 border-brand-border cursor-pointer relative flex items-center justify-center transition-transform duration-100 overflow-hidden",
+                isCustomColor && "scale-105"
+              )}
+              style={{
+                background: isCustomColor
+                  ? color
+                  : "conic-gradient(from 0deg, #ff2d55, #ff7e1b, #ffdf00, #00c853, #00e5ff, #1e6bf1, #8e2de2, #ff5c8a, #ff2d55)",
+                boxShadow: isCustomColor
+                  ? `0 0 16px 2px ${color}, inset 0 0 0 2px white`
+                  : "none",
+              }}
+            >
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => {
+                  onColorChange(e.target.value);
+                  if (tool === TOOLS.ERASER) onToolChange(TOOLS.PEN);
+                }}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                title="Pick custom color"
+              />
+              {!isCustomColor && (
+                <Plus className="w-3.5 h-3.5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] pointer-events-none" />
+              )}
+              {isCustomColor && (
+                <motion.div
+                  layoutId="activeColorBorder"
+                  className="absolute inset-[-4px] border-2 border-[#13141f] rounded-full pointer-events-none"
+                  transition={{ type: "spring", stiffness: 450, damping: 16 }}
+                />
+              )}
+            </motion.label>
+          </Tooltip>
         </div>
 
         {/* ── Pod 3: Brush Size & Presets ───────────────────── */}

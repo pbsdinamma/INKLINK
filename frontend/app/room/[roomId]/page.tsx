@@ -371,6 +371,27 @@ export default function RoomPage({ params }: RoomPageProps) {
 
         {/* Right: User list and chat controls */}
         <div className="flex items-center gap-2">
+          {/* Overlapping Player Avatars preview */}
+          {users.length > 0 && (
+            <div className="hidden md:flex items-center -space-x-2 mr-1">
+              {users.slice(0, 3).map((u) => (
+                <div
+                  key={u.id}
+                  className="w-7 h-7 rounded-full border-2 border-[#13141f] flex items-center justify-center text-[10px] font-black text-white shadow-[0_1.5px_0px_#13141f]"
+                  style={{ backgroundColor: u.color }}
+                  title={u.username}
+                >
+                  {u.username.charAt(0).toUpperCase()}
+                </div>
+              ))}
+              {users.length > 3 && (
+                <div className="w-7 h-7 rounded-full border-2 border-[#13141f] bg-white text-brand-border flex items-center justify-center text-[9px] font-black shadow-[0_1.5px_0px_#13141f]">
+                  +{users.length - 3}
+                </div>
+              )}
+            </div>
+          )}
+
           <motion.button
             whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
@@ -467,6 +488,39 @@ export default function RoomPage({ params }: RoomPageProps) {
             }}
             onReplayEnd={handleReplayEnd}
           />
+
+          {/* Active Replay Floating Banner */}
+          <AnimatePresence>
+            {isReplaying && (
+              <motion.div
+                initial={{ opacity: 0, y: -24, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -24, scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 px-4 py-2 bg-[#13141f] text-white rounded-2xl shadow-[0_6px_0px_rgba(0,0,0,0.3)] border-2 border-[#13141f] select-none pointer-events-auto"
+              >
+                <span className="w-2.5 h-2.5 rounded-full bg-brand-orange animate-ping" />
+                <span className="text-xs font-black tracking-wide">
+                  Replaying canvas history...
+                </span>
+                <button
+                  onClick={handleToggleReplay}
+                  className="text-[10px] font-black uppercase px-2.5 py-1 bg-brand-orange text-white rounded-lg hover:bg-brand-orange/90 cursor-pointer shadow-[0_1.5px_0px_rgba(0,0,0,0.4)] transition-transform active:scale-95"
+                >
+                  Stop
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Subtle Floating Keyboard Shortcuts Pill */}
+          <div className="absolute bottom-3 left-4 hidden lg:flex items-center gap-3 px-3 py-1.5 bg-white/80 backdrop-blur-md border-2 border-brand-border/15 rounded-xl text-[10px] font-black text-brand-border/50 select-none shadow-[0_2px_0px_rgba(19,20,31,0.04)] pointer-events-none z-20">
+            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">P</kbd> Pen</span>
+            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">E</kbd> Eraser</span>
+            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">Ctrl+Z</kbd> Undo</span>
+            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">D</kbd> Save</span>
+            <span><kbd className="px-1 py-0.5 bg-brand-bg rounded border border-brand-border/10 font-mono text-[9px]">R</kbd> Replay</span>
+          </div>
 
           {/* Sockets Connecting Overlay */}
           {!connected && !reconnecting && (

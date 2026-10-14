@@ -207,6 +207,10 @@ export function Canvas({
     <div
       ref={containerRef}
       className="relative w-full h-full overflow-hidden bg-white border-3 border-brand-border rounded-[24px] shadow-[0_8px_0px_#13141f]"
+      style={{
+        backgroundImage: `radial-gradient(circle, rgba(19, 20, 31, 0.07) 1.2px, transparent 1.2px)`,
+        backgroundSize: "24px 24px",
+      }}
     >
       <canvas
         ref={canvasRef}
