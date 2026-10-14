@@ -29,12 +29,12 @@
     color: #13141f;
     overflow-x: hidden;
     
-    /* Playful checkered paper texture */
-    background-color: #f0f4ff; 
+    /* Subtle modern canvas grid */
+    background-color: #f8fafc; 
     background-image: 
-      linear-gradient(rgba(19, 20, 31, 0.04) 1.5px, transparent 1.5px),
-      linear-gradient(90deg, rgba(19, 20, 31, 0.04) 1.5px, transparent 1.5px);
-    background-size: 20px 20px;
+      linear-gradient(rgba(19, 20, 31, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(19, 20, 31, 0.025) 1px, transparent 1px);
+    background-size: 24px 24px;
     background-position: center;
   }
 

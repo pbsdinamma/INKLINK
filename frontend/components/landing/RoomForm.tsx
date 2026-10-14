@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles, Users } from "lucide-react";
+import { ArrowRight, User, KeyRound } from "lucide-react";
 
 export function RoomForm({ className }: { className?: string } = {}) {
   const router = useRouter();
@@ -39,74 +39,84 @@ export function RoomForm({ className }: { className?: string } = {}) {
 
   return (
     <div className={className ?? "w-full relative select-none"}>
-      {/* Main card */}
+      {/* Clean, prominent card */}
       <motion.div
         layout
-        className="bg-white border-4 border-[#13141f] rounded-[24px] p-6 sm:p-7 shadow-[0_8px_0px_#13141f] relative overflow-hidden"
+        className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-xl shadow-slate-200/50 relative"
       >
-        {/* Playful Tab Toggles */}
-        <div className="flex bg-[#f3f7ff] border-3 border-[#13141f] rounded-2xl p-1 mb-6 relative">
+        {/* Sleek Tab Switcher */}
+        <div className="flex bg-slate-100/80 p-1 rounded-xl mb-5 relative">
           {(["create", "join"] as const).map((m) => {
             const isActive = mode === m;
             return (
               <button
                 key={m}
                 type="button"
-                onClick={() => setMode(m)}
-                className="flex-1 py-2.5 rounded-xl text-sm font-black capitalize transition-all relative z-10 cursor-pointer"
-                style={{ color: isActive ? "#ffffff" : "#13141f" }}
+                onClick={() => {
+                  setMode(m);
+                  setError("");
+                }}
+                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all relative z-10 cursor-pointer ${
+                  isActive ? "text-white" : "text-slate-600 hover:text-slate-900"
+                }`}
               >
                 {isActive && (
                   <motion.div
-                    layoutId="modeSlider"
-                    className="absolute inset-0 bg-[#1e6bf1] border-2 border-[#13141f] rounded-xl -z-10 shadow-[0_2px_0px_#13141f]"
-                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                    layoutId="roomModeSlider"
+                    className="absolute inset-0 bg-brand-blue rounded-lg -z-10 shadow-sm"
+                    transition={{ type: "spring", stiffness: 400, damping: 28 }}
                   />
                 )}
-                {m === "create" ? "Create Room" : "Join Room"}
+                {m === "create" ? "Create New Room" : "Join Existing Room"}
               </button>
             );
           })}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Username Input */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-black text-[#13141f]/50 uppercase tracking-wider pl-1 text-left">
-              Your Avatar Name
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Nickname Input */}
+          <div className="space-y-1">
+            <label className="block text-xs font-bold text-slate-700 text-left">
+              Your Nickname
             </label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="e.g. InkyPanda..."
-              maxLength={20}
-              className="w-full bg-white border-3 border-[#13141f] rounded-2xl px-4 py-3.5 text-sm font-black text-[#13141f] placeholder-[#13141f]/35 focus:outline-none focus:border-[#1e6bf1] transition-all"
-              autoFocus
-            />
+            <div className="relative flex items-center">
+              <User className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="e.g. InkyPanda..."
+                maxLength={20}
+                className="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/15 rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold text-slate-900 placeholder:text-slate-400 transition-all outline-none"
+                autoFocus
+              />
+            </div>
           </div>
 
-          {/* Join Code (Conditional with animation) */}
+          {/* Join Code (Conditional with smooth transition) */}
           <AnimatePresence mode="popLayout">
             {mode === "join" && (
               <motion.div
-                initial={{ opacity: 0, height: 0, scale: 0.95 }}
+                initial={{ opacity: 0, height: 0, scale: 0.98 }}
                 animate={{ opacity: 1, height: "auto", scale: 1 }}
-                exit={{ opacity: 0, height: 0, scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                className="space-y-1.5 overflow-hidden"
+                exit={{ opacity: 0, height: 0, scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-1 overflow-hidden"
               >
-                <label className="block text-xs font-black text-[#13141f]/50 uppercase tracking-wider pl-1 text-left">
+                <label className="block text-xs font-bold text-slate-700 text-left">
                   Room Invite Code
                 </label>
-                <input
-                  type="text"
-                  value={joinCode}
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                  placeholder="ENTER CODE..."
-                  maxLength={16}
-                  className="w-full bg-white border-3 border-[#13141f] rounded-2xl px-4 py-3.5 text-sm font-black tracking-widest uppercase font-mono text-[#13141f] placeholder-[#13141f]/35 focus:outline-none focus:border-[#1e6bf1] transition-all"
-                />
+                <div className="relative flex items-center">
+                  <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={joinCode}
+                    onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                    placeholder="ENTER CODE..."
+                    maxLength={16}
+                    className="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/15 rounded-xl pl-10 pr-4 py-2.5 text-sm font-mono font-bold tracking-wider uppercase text-slate-900 placeholder:text-slate-400 transition-all outline-none"
+                  />
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -115,35 +125,33 @@ export function RoomForm({ className }: { className?: string } = {}) {
           <AnimatePresence>
             {error && (
               <motion.p
-                initial={{ opacity: 0, y: -5 }}
+                initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="text-[#ff2d55] text-xs font-black bg-[#ff2d55]/5 border-2 border-[#ff2d55]/20 rounded-xl px-3 py-2 text-center"
+                className="text-rose-600 text-xs font-bold bg-rose-50 border border-rose-200 rounded-lg px-3 py-2 text-center"
               >
                 {error}
               </motion.p>
             )}
           </AnimatePresence>
 
-          {/* Submit Action */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          {/* Submit Action Button */}
+          <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#ff7e1b] text-white font-black py-4 border-3 border-[#13141f] rounded-2xl flex items-center justify-center gap-2 shrink-0 disabled:opacity-75 disabled:cursor-not-allowed hover:bg-[#ff7e1b]/95 shadow-[0_5px_0px_#13141f] cursor-pointer"
+            className="w-full bg-brand-blue hover:bg-brand-blue/95 active:scale-[0.99] text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md shadow-brand-blue/20 hover:shadow-lg hover:shadow-brand-blue/25 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
-              <span className="animate-spin w-5 h-5 border-3 border-white/30 border-t-white rounded-full" />
+              <span className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
             ) : (
               <>
-                <span className="tracking-wide text-sm font-black">
-                  {mode === "create" ? "Start Drawing!" : "Join Canvas!"}
+                <span className="text-sm font-bold">
+                  {mode === "create" ? "Create Room & Start Drawing" : "Join Canvas Room"}
                 </span>
                 <ArrowRight className="w-4 h-4 shrink-0" />
               </>
             )}
-          </motion.button>
+          </button>
         </form>
       </motion.div>
     </div>

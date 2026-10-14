@@ -5,213 +5,126 @@ import { RoomForm } from "@/components/landing/RoomForm";
 import { motion } from "framer-motion";
 import {
   Pencil,
-  Sparkles,
+  Zap,
   Users,
   MessageSquare,
   Play,
   Download,
-  Zap,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen text-[#13141f] relative overflow-x-hidden flex flex-col justify-between">
-      {/* ── Playful Floating Doodles (Background) ──────────────── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
-        <motion.div
-          animate={{
-            y: [0, -18, 0],
-            rotate: [0, 12, 0],
-          }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 left-8 md:left-20 w-14 h-14 border-4 border-[#ff7e1b] rounded-2xl opacity-25"
-        />
-        <motion.div
-          animate={{
-            y: [0, 22, 0],
-            rotate: [0, -14, 0],
-          }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-28 left-16 md:left-36 w-16 h-16 border-4 border-[#1e6bf1] rounded-full opacity-20"
-        />
-        <motion.div
-          animate={{
-            y: [0, -26, 0],
-            rotate: [0, 18, 0],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-          className="absolute top-36 right-8 md:right-28 w-14 h-14 border-4 border-[#00c853] rounded-[14px] opacity-25"
-        />
-        <motion.div
-          animate={{
-            y: [0, 20, 0],
-            rotate: [0, -10, 0],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-          className="absolute bottom-36 right-16 md:right-40 w-14 h-14 border-4 border-[#ffdf00] rounded-full opacity-30"
-        />
-      </div>
-
+    <main className="min-h-screen text-[#13141f] flex flex-col justify-between selection:bg-brand-blue/15">
       {/* ── Top Header / Brand Bar ──────────────────────────────── */}
-      <header className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-4 flex items-center justify-between">
+      <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-2 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <motion.div
-            whileHover={{ scale: 1.08, rotate: -6 }}
-            className="w-11 h-11 bg-[#1e6bf1] border-3 border-[#13141f] rounded-2xl shadow-[0_4px_0px_#13141f] flex items-center justify-center cursor-pointer"
-          >
-            <Pencil className="w-5 h-5 text-white" />
-          </motion.div>
+          <div className="w-10 h-10 bg-brand-blue rounded-xl flex items-center justify-center text-white shadow-sm shadow-brand-blue/30">
+            <Pencil className="w-5 h-5" />
+          </div>
           <div>
-            <h1 className="text-2xl font-black tracking-tight leading-none text-[#13141f]">
-              Ink<span className="text-[#1e6bf1]">Link</span>
+            <h1 className="text-xl font-black tracking-tight leading-none text-[#13141f]">
+              Ink<span className="text-brand-blue">Link</span>
             </h1>
-            <p className="text-[10px] font-black text-[#13141f]/50 uppercase tracking-widest mt-0.5">
-              Multiplayer Whiteboard
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              Collaborative Whiteboard
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-[#13141f] rounded-full text-xs font-black shadow-[0_2px_0px_#13141f] text-[#00c853]">
-            <span className="w-2 h-2 rounded-full bg-[#00c853] animate-pulse" />
-            100% Free · No Sign-Up Needed
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200/80 rounded-full text-xs font-semibold text-slate-600 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            No sign-up required · Free & instant
           </div>
         </div>
       </header>
 
-      {/* ── Main Hero Section: Description + Form + Demo Image ──── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 lg:py-10">
+      {/* ── Hero Section: Intro + Form + Product Visual ─────────── */}
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* Left Column: Heading, Description, Key Highlights & Form */}
+          {/* Left Column: Heading, Description, Clean Feature Row & CTA Form */}
           <div className="lg:col-span-5 flex flex-col justify-center">
-            {/* Pill Tag */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#f3f7ff] border-3 border-[#13141f] rounded-full text-xs font-black text-[#1e6bf1] shadow-[0_3px_0px_#13141f] w-max mb-4"
-            >
-              <Sparkles className="w-3.5 h-3.5 shrink-0 text-[#ff7e1b]" />
+            {/* Subtle Eyebrow Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/5 border border-brand-blue/15 rounded-full text-xs font-bold text-brand-blue w-max mb-4">
+              <Sparkles className="w-3.5 h-3.5" />
               Real-time Collaborative Canvas
-            </motion.div>
+            </div>
 
-            {/* Main Headline */}
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-5xl font-black text-[#13141f] tracking-tight leading-[1.08] mb-4 select-none"
-            >
+            {/* Clean, Bold Heading */}
+            <h2 className="text-4xl sm:text-5xl font-black text-[#13141f] tracking-tight leading-[1.1] mb-4">
               Draw, sketch & collaborate together in{" "}
-              <span className="text-[#1e6bf1] underline decoration-[#ffdf00] decoration-wavy decoration-2">
-                real time.
-              </span>
-            </motion.h2>
+              <span className="text-brand-blue">real time.</span>
+            </h2>
 
-            {/* Clear Short Description of What the Website Does */}
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="text-[#13141f]/75 text-sm sm:text-base font-bold leading-relaxed mb-6 select-none"
-            >
-              <strong>InkLink</strong>{" "}is a fast, interactive multiplayer whiteboard designed for friends, teams, and creatives. Draw together simultaneously with zero lag, chat in live rooms, see everyone&apos;s real-time cursors, replay your canvas history stroke-by-stroke, and export your creations instantly.
-            </motion.p>
+            {/* Concise Product Description */}
+            <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed mb-6">
+              InkLink is a lightweight, real-time multiplayer whiteboard built for brainstorming, rapid sketching, and team work sessions. Jump in with zero setup — draw simultaneously, view live cursors, chat with room members, and replay board history.
+            </p>
 
-            {/* Quick Feature Badges */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.25 }}
-              className="grid grid-cols-2 gap-2.5 mb-8 text-xs font-black text-[#13141f]/80"
-            >
-              <div className="flex items-center gap-2 p-2 bg-white/80 border-2 border-[#13141f] rounded-xl shadow-[0_2px_0px_#13141f]">
-                <Zap className="w-3.5 h-3.5 text-[#ff7e1b] shrink-0" />
-                <span>60 FPS Live Sync</span>
+            {/* Clean Feature Highlights (Simpler, uncluttered inline icons) */}
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-4 mb-7 text-xs font-semibold text-slate-700">
+              <div className="inline-flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+                <span>60 FPS Sync</span>
               </div>
-              <div className="flex items-center gap-2 p-2 bg-white/80 border-2 border-[#13141f] rounded-xl shadow-[0_2px_0px_#13141f]">
-                <Users className="w-3.5 h-3.5 text-[#1e6bf1] shrink-0" />
+              <span className="text-slate-300">•</span>
+              <div className="inline-flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5 text-brand-blue shrink-0" />
                 <span>Multiplayer Cursors</span>
               </div>
-              <div className="flex items-center gap-2 p-2 bg-white/80 border-2 border-[#13141f] rounded-xl shadow-[0_2px_0px_#13141f]">
-                <MessageSquare className="w-3.5 h-3.5 text-[#ff5c8a] shrink-0" />
-                <span>Built-in Room Chat</span>
+              <span className="text-slate-300">•</span>
+              <div className="inline-flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+                <span>Room Chat</span>
               </div>
-              <div className="flex items-center gap-2 p-2 bg-white/80 border-2 border-[#13141f] rounded-xl shadow-[0_2px_0px_#13141f]">
-                <Play className="w-3.5 h-3.5 text-[#00c853] shrink-0" />
-                <span>Drawing Replay</span>
+              <span className="text-slate-300">•</span>
+              <div className="inline-flex items-center gap-1.5">
+                <Play className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+                <span>Replay & PNG Export</span>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Join / Create Room Form */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", stiffness: 220, damping: 20, delay: 0.3 }}
-              className="w-full"
-            >
+            {/* Functional & Prominent CTA Card */}
+            <div className="w-full">
               <RoomForm />
-            </motion.div>
+            </div>
           </div>
 
-          {/* Right Column: Live Demo Mockup Preview */}
-          <motion.div
-            initial={{ opacity: 0, x: 25 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 22, delay: 0.25 }}
-            className="lg:col-span-7 flex flex-col items-center"
-          >
-            <div className="w-full relative group">
-              {/* Playful Floating Tags around Demo Window */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-3.5 right-6 z-20 flex items-center gap-2 bg-[#ffdf00] text-[#13141f] border-3 border-[#13141f] rounded-full px-3.5 py-1 text-xs font-black shadow-[0_3px_0px_#13141f]"
-              >
-                <Users className="w-3.5 h-3.5" />
-                <span>3 Players Online Now</span>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-3.5 left-6 z-20 hidden sm:flex items-center gap-2 bg-[#ff5c8a] text-white border-3 border-[#13141f] rounded-full px-3.5 py-1 text-xs font-black shadow-[0_3px_0px_#13141f]"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Real-Time Multi-Cursor Sync</span>
-              </motion.div>
-
-              {/* Browser Window Mockup Frame */}
-              <div className="bg-white border-4 border-[#13141f] rounded-[28px] shadow-[0_12px_0px_#13141f] overflow-hidden transition-transform duration-300 hover:-translate-y-1">
-                {/* Browser Title Bar */}
-                <div className="bg-[#f0f4ff] border-b-3 border-[#13141f] px-4 py-2.5 flex items-center justify-between select-none">
-                  {/* Traffic light buttons */}
+          {/* Right Column: Authentic Product Visual (Clean, unadorned app frame) */}
+          <div className="lg:col-span-7 flex flex-col items-center">
+            <div className="w-full">
+              {/* Clean App Window Frame */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl shadow-xl shadow-slate-200/60 overflow-hidden">
+                {/* Minimal Window Header */}
+                <div className="bg-slate-50/90 border-b border-slate-200/80 px-4 py-2.5 flex items-center justify-between select-none">
+                  {/* Window dots */}
                   <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-[#ff5c8a] border-2 border-[#13141f]" />
-                    <span className="w-3 h-3 rounded-full bg-[#ffdf00] border-2 border-[#13141f]" />
-                    <span className="w-3 h-3 rounded-full bg-[#00c853] border-2 border-[#13141f]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                   </div>
 
-                  {/* Browser URL pill */}
-                  <div className="flex items-center gap-1.5 bg-white border-2 border-[#13141f] rounded-lg px-4 py-0.5 text-[11px] font-black text-[#13141f]/60 font-mono shadow-[0_1.5px_0px_#13141f]">
-                    <ShieldCheck className="w-3 h-3 text-[#00c853]" />
+                  {/* Clean URL bar */}
+                  <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-md px-3 py-0.5 text-[11px] font-mono text-slate-500 shadow-2xs">
+                    <ShieldCheck className="w-3 h-3 text-emerald-500" />
                     <span>inklink.app/room/demo-room</span>
                   </div>
 
-                  {/* Live sync badge */}
-                  <div className="flex items-center gap-1 text-[10px] font-black text-[#1e6bf1]">
-                    <span className="w-2 h-2 rounded-full bg-[#1e6bf1] animate-ping" />
-                    <span>LIVE</span>
+                  {/* Live status */}
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-brand-blue">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span>Live Session</span>
                   </div>
                 </div>
 
-                {/* Actual Demo Screenshot showing the full page with 3 users */}
-                <div className="relative w-full aspect-[16/9] bg-white overflow-hidden">
+                {/* Actual Product Screenshot */}
+                <div className="relative w-full aspect-[16/9] bg-slate-100 overflow-hidden">
                   <Image
                     src="/demo-preview.png"
-                    alt="InkLink Real-Time Collaborative Whiteboard with Multiple Users"
+                    alt="InkLink Real-time Collaborative Whiteboard"
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 58vw"
@@ -219,88 +132,88 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Caption under demo image */}
-            <p className="mt-4 text-xs font-bold text-[#13141f]/60 text-center select-none">
-              👆 Live preview: Collaborative drawing, player roster, room chat, and full tool suite.
-            </p>
-          </motion.div>
+              {/* Subdued Caption */}
+              <p className="mt-3 text-xs font-medium text-slate-500 text-center select-none">
+                Live product preview with real-time multiplayer drawing, cursors, chat, and toolbar.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ── Feature Cards Row ──────────────────────────────────── */}
-      <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        <div className="text-center mb-8">
+      {/* ── Clean 3-Column Feature Grid ────────────────────────── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-slate-200/70">
+        <div className="text-center max-w-2xl mx-auto mb-10">
           <h3 className="text-2xl sm:text-3xl font-black text-[#13141f] tracking-tight">
-            Everything you need for creative teamwork
+            Built for speed and effortless collaboration
           </h3>
-          <p className="text-sm font-bold text-[#13141f]/60 mt-1">
-            Built from the ground up for speed, fun, and seamless collaboration.
+          <p className="text-sm font-medium text-slate-600 mt-2">
+            Every feature is designed to make drawing and brainstorming with others as immediate as sketching on real paper.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          <div className="skribbl-card p-6 flex flex-col justify-between">
+          {/* Feature 1 */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-[#1e6bf1]/10 border-3 border-[#13141f] flex items-center justify-center text-[#1e6bf1] mb-4 shadow-[0_3px_0px_#13141f]">
-                <Pencil className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue mb-4">
+                <Pencil className="w-5 h-5" />
               </div>
-              <h4 className="text-lg font-black text-[#13141f] mb-2">
-                Expressive Canvas & Tools
+              <h4 className="text-base font-bold text-[#13141f] mb-1.5">
+                Responsive Canvas & Tools
               </h4>
-              <p className="text-xs font-bold text-[#13141f]/70 leading-relaxed">
-                Freehand pen, precision eraser, playful color swatches, adjustable brush sizes, and smart per-user Undo/Redo controls with keyboard shortcut support.
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Freehand pen, precision eraser, tailored color palette, and dynamic brush sizes with smart per-user Undo/Redo.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t-2 border-[#13141f]/10 text-[11px] font-black text-[#1e6bf1]">
-              Full HTML5 Canvas Performance →
+            <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-brand-blue">
+              HTML5 Canvas with 60 FPS delta syncing
             </div>
           </div>
 
-          {/* Card 2 */}
-          <div className="skribbl-card p-6 flex flex-col justify-between">
+          {/* Feature 2 */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-[#ff7e1b]/10 border-3 border-[#13141f] flex items-center justify-center text-[#ff7e1b] mb-4 shadow-[0_3px_0px_#13141f]">
-                <Users className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue mb-4">
+                <Users className="w-5 h-5" />
               </div>
-              <h4 className="text-lg font-black text-[#13141f] mb-2">
-                Multiplayer Rooms & Chat
+              <h4 className="text-base font-bold text-[#13141f] mb-1.5">
+                Live Multiplayer Cursors & Chat
               </h4>
-              <p className="text-xs font-bold text-[#13141f]/70 leading-relaxed">
-                Share an instant room link to invite anyone. Track other players&apos; cursors live with colorful labels, and discuss ideas using the built-in room chat with unread notifications.
+              <p className="text-xs text-slate-600 leading-relaxed">
+                See where everyone is pointing with color-coded live cursor labels and talk directly inside the room chat with unread notifications.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t-2 border-[#13141f]/10 text-[11px] font-black text-[#ff7e1b]">
-              Real-time WebSockets via Socket.IO →
+            <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-brand-blue">
+              Real-time WebSockets via Socket.IO
             </div>
           </div>
 
-          {/* Card 3 */}
-          <div className="skribbl-card p-6 flex flex-col justify-between">
+          {/* Feature 3 */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-[#00c853]/10 border-3 border-[#13141f] flex items-center justify-center text-[#00c853] mb-4 shadow-[0_3px_0px_#13141f]">
-                <Play className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue mb-4">
+                <Play className="w-5 h-5" />
               </div>
-              <h4 className="text-lg font-black text-[#13141f] mb-2">
+              <h4 className="text-base font-bold text-[#13141f] mb-1.5">
                 Stroke Replay & PNG Export
               </h4>
-              <p className="text-xs font-bold text-[#13141f]/70 leading-relaxed">
-                Watch drawings come to life with an animated stroke-by-stroke replay engine, complete with pause and stop controls. Download your artwork in high-resolution PNG format anytime.
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Watch artwork unfold step-by-step with the animated replay engine, or export the full canvas as a clean PNG image.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t-2 border-[#13141f]/10 text-[11px] font-black text-[#00c853]">
-              Instant One-Click Download →
+            <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-brand-blue">
+              Server-authoritative timeline
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Footer ─────────────────────────────────────────────── */}
-      <footer className="relative z-10 w-full border-t-3 border-[#13141f]/10 py-6 px-4 text-center select-none bg-white/40">
-        <p className="text-[#13141f]/60 text-xs font-black tracking-wide">
-          InkLink — Collaborative Whiteboard · Next.js · Socket.IO · TypeScript · HTML5 Canvas
+      <footer className="w-full border-t border-slate-200/80 py-6 px-4 text-center select-none bg-white">
+        <p className="text-slate-500 text-xs font-medium">
+          InkLink — Open Collaborative Whiteboard · Next.js · Socket.IO · TypeScript
         </p>
       </footer>
     </main>
