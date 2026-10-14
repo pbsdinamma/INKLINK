@@ -8,19 +8,25 @@ import type { AppSocket } from "@/lib/socket";
 import { Send, MessageSquare, X } from "lucide-react";
 
 interface ChatPanelProps {
-  socket: AppSocket | null;
-  initialMessages: ChatMessage[];
+  socket?: AppSocket | null;
+  initialMessages?: ChatMessage[];
+  messages?: ChatMessage[];
+  onSendMessage?: (msg: string) => void;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function ChatPanel({
-  socket,
-  initialMessages,
+  socket = null,
+  initialMessages = [],
+  messages: externalMessages,
+  onSendMessage: externalSendMessage,
   isOpen,
   onClose,
 }: ChatPanelProps) {
-  const { messages, sendMessage } = useChat(socket, initialMessages);
+  const internalChat = useChat(externalMessages ? null : socket, initialMessages);
+  const messages = externalMessages ?? internalChat.messages;
+  const sendMessage = externalSendMessage ?? internalChat.sendMessage;
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 

@@ -8,13 +8,16 @@ import { Toolbar } from "@/components/whiteboard/Toolbar";
 import { UserList } from "@/components/whiteboard/UserList";
 import { ChatPanel } from "@/components/whiteboard/ChatPanel";
 import { useSocket } from "@/hooks/useSocket";
+import { useChat } from "@/hooks/useChat";
 import { getSocket } from "@/lib/socket";
 import type { RoomState, Stroke, User, ChatMessage, Tool } from "@/types";
+
 import {
   DEFAULT_COLOR,
   DEFAULT_BRUSH_SIZE,
   DEFAULT_TOOL,
 } from "@/lib/constants";
+
 import {
   Copy,
   MessageSquare,
@@ -24,6 +27,7 @@ import {
   Loader2,
   ChevronLeft,
 } from "lucide-react";
+
 import { Toaster, toast } from "react-hot-toast";
 
 interface RoomPageProps {
@@ -62,7 +66,8 @@ export default function RoomPage({ params }: RoomPageProps) {
   const redoRef = useRef<() => void>(() => {});
   const clearRef = useRef<() => void>(() => {});
   const downloadRef = useRef<() => void>(() => {});
-  const replayRef = useRef<() => void>(() => {});
+  const startReplayRef = useRef<() => void>(() => {});
+  const stopReplayRef = useRef<() => void>(() => {});
 
   // ─── Room Sync Handlers ───────────────────────────────────
   const handleRoomState = useCallback(
@@ -138,13 +143,44 @@ export default function RoomPage({ params }: RoomPageProps) {
 
   // Increment unread count if chat panel is hidden
   const handleNewMessage = useCallback(() => {
-    if (!showChat) setUnreadCount((n) => n + 1);
-  }, [showChat]);
+    setShowChat((currentShowChat) => {
+      if (!currentShowChat) {
+        setUnreadCount((n) => n + 1);
+      }
+      return currentShowChat;
+    });
+  }, []);
+
+  const { messages: liveChatMessages, sendMessage } = useChat(
+    socket,
+    chatMessages,
+    handleNewMessage
+  );
 
   const handleToggleChat = () => {
-    setShowChat((v) => !v);
-    setUnreadCount(0);
+    setShowChat((v) => {
+      if (!v) setUnreadCount(0);
+      return !v;
+    });
   };
+
+  const handleToggleReplay = useCallback(() => {
+    if (isReplaying) {
+      stopReplayRef.current();
+      setIsReplaying(false);
+    } else {
+      if (strokes.length === 0) {
+        toast("No drawings to replay yet!", { icon: "🎨" });
+        return;
+      }
+      setIsReplaying(true);
+      startReplayRef.current();
+    }
+  }, [isReplaying, strokes.length]);
+
+  const handleReplayEnd = useCallback(() => {
+    setIsReplaying(false);
+  }, []);
 
   const handleCopyRoomId = () => {
     const url = `${window.location.origin}/room/${roomId}`;
@@ -385,9 +421,11 @@ export default function RoomPage({ params }: RoomPageProps) {
             onDownloadReady={(download) => {
               downloadRef.current = download;
             }}
-            onReplayReady={(replay) => {
-              replayRef.current = replay;
+            onReplayReady={(startReplay, stopReplay) => {
+              startReplayRef.current = startReplay;
+              stopReplayRef.current = stopReplay;
             }}
+            onReplayEnd={handleReplayEnd}
           />
 
           {/* Sockets Connecting Overlay */}
@@ -415,7 +453,8 @@ export default function RoomPage({ params }: RoomPageProps) {
             >
               <ChatPanel
                 socket={socket}
-                initialMessages={chatMessages}
+                messages={liveChatMessages}
+                onSendMessage={sendMessage}
                 isOpen={showChat}
                 onClose={handleToggleChat}
               />
@@ -438,12 +477,7 @@ export default function RoomPage({ params }: RoomPageProps) {
         onRedo={handleRedo}
         onClear={() => clearRef.current()}
         onDownload={() => downloadRef.current()}
-        onReplay={() => {
-          setIsReplaying(true);
-          replayRef.current();
-          // Reset replaying flag when replay loop completes
-          setTimeout(() => setIsReplaying(false), 3000);
-        }}
+        onReplay={handleToggleReplay}
         isReplaying={isReplaying}
       />
     </div>

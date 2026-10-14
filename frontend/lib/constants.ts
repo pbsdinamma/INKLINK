@@ -5,7 +5,7 @@ export const TOOLS = {
 } as const;
 
 // ─── Drawing defaults ─────────────────────────────────────────
-export const DEFAULT_COLOR = "#FFFFFF";
+export const DEFAULT_COLOR = "#000000";
 export const DEFAULT_BRUSH_SIZE = 4;
 export const DEFAULT_TOOL = TOOLS.PEN;
 

@@ -1,5 +1,6 @@
 import type { Server, Socket } from "socket.io";
 import { nanoid } from "nanoid";
+
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -7,6 +8,7 @@ import type {
   SocketData,
   User,
 } from "../../../shared/types";
+
 import { RoomManager } from "../rooms/RoomManager";
 import { clearRateLimit } from "../middleware/rateLimit";
 import { registerDrawingHandlers } from "./handlers/drawingHandler";
@@ -39,6 +41,11 @@ const roomManager = RoomManager.getInstance();
 export function initSocketHandlers(io: AppServer): void {
   io.on("connection", (socket: AppSocket) => {
     console.log(`[Socket] Client connected: ${socket.id}`);
+
+    // Register domain event handlers once per socket connection
+    registerDrawingHandlers(io, socket);
+    registerCursorHandlers(io, socket);
+    registerChatHandlers(io, socket);
 
     // ─── room:join ───────────────────────────────────────────
     socket.on("room:join", ({ roomId, username }) => {
@@ -91,11 +98,6 @@ export function initSocketHandlers(io: AppServer): void {
 
       // Notify everyone else about updated user list
       io.to(roomId).emit("room:users", room.getUsers());
-
-      // Register all domain handlers now that socket.data is populated
-      registerDrawingHandlers(io, socket);
-      registerCursorHandlers(io, socket);
-      registerChatHandlers(io, socket);
     });
 
     // ─── disconnect ──────────────────────────────────────────

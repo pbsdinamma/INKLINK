@@ -11,6 +11,8 @@ import {
   Download,
   Play,
   Square,
+  Undo2,
+  Redo2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -286,6 +288,24 @@ export function Toolbar({
 
         {/* ── Pod 4: Action Buttons ──────────────────────────── */}
         <div className="flex items-center gap-1.5 p-1 bg-[#f8fafc] border-2 border-brand-border rounded-2xl shrink-0 shadow-[inset_0_2px_4px_rgba(19,20,31,0.02)]">
+          <IconBtn
+            onClick={onUndo}
+            title="Undo"
+            shortcut="Ctrl+Z"
+            disabled={!canUndo}
+          >
+            <Undo2 className="w-4 h-4" />
+          </IconBtn>
+
+          <IconBtn
+            onClick={onRedo}
+            title="Redo"
+            shortcut="Ctrl+Y"
+            disabled={!canRedo}
+          >
+            <Redo2 className="w-4 h-4" />
+          </IconBtn>
+
           <IconBtn onClick={onDownload} title="Download Canvas" shortcut="D">
             <Download className="w-4 h-4" />
           </IconBtn>

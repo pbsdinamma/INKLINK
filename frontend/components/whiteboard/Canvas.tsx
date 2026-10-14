@@ -19,7 +19,8 @@ interface CanvasProps {
   onUndoRedoReady: (undo: () => void, redo: () => void) => void;
   onClearReady: (clear: () => void) => void;
   onDownloadReady: (download: () => void) => void;
-  onReplayReady: (replay: () => void) => void;
+  onReplayReady: (startReplay: () => void, stopReplay: () => void) => void;
+  onReplayEnd?: () => void;
 }
 
 export function Canvas({
@@ -32,12 +33,14 @@ export function Canvas({
   onClearReady,
   onDownloadReady,
   onReplayReady,
+  onReplayEnd,
 }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [displaySize, setDisplaySize] = useState({ width: 0, height: 0 });
   const [cursors, setCursors] = useState<Map<string, RemoteCursor>>(new Map());
   const [isReplaying, setIsReplaying] = useState(false);
+  const animFrameRef = useRef<number | null>(null);
 
   // Track canvas display size for cursor overlay scaling
   useEffect(() => {
@@ -102,12 +105,39 @@ export function Canvas({
     });
   }, [onDownloadReady]);
 
-  // Replay feature
-  const handleReplay = useCallback(() => {
+  // Replay feature with start/stop and cancelAnimationFrame support
+  const stopReplay = useCallback(() => {
+    if (animFrameRef.current !== null) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+    setIsReplaying(false);
+    onReplayEnd?.();
+
+    // Restore full canvas with current strokes
     const canvas = canvasRef.current;
-    if (!canvas || isReplaying) return;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        renderStrokes(ctx, strokes, CANVAS_WIDTH, CANVAS_HEIGHT);
+      }
+    }
+  }, [strokes, onReplayEnd]);
+
+  const startReplay = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    if (strokes.length === 0) {
+      onReplayEnd?.();
+      return;
+    }
+
+    if (animFrameRef.current !== null) {
+      cancelAnimationFrame(animFrameRef.current);
+    }
 
     setIsReplaying(true);
     const allStrokes = [...strokes];
@@ -119,7 +149,10 @@ export function Canvas({
 
     const replayFrame = () => {
       if (strokeIdx >= allStrokes.length) {
+        animFrameRef.current = null;
         setIsReplaying(false);
+        renderStrokes(ctx, allStrokes, CANVAS_WIDTH, CANVAS_HEIGHT);
+        onReplayEnd?.();
         return;
       }
       const stroke = allStrokes[strokeIdx];
@@ -139,14 +172,24 @@ export function Canvas({
         strokeIdx++;
         pointIdx = 0;
       }
-      requestAnimationFrame(replayFrame);
+      animFrameRef.current = requestAnimationFrame(replayFrame);
     };
-    requestAnimationFrame(replayFrame);
-  }, [strokes, isReplaying]);
+
+    animFrameRef.current = requestAnimationFrame(replayFrame);
+  }, [strokes, onReplayEnd]);
 
   useEffect(() => {
-    onReplayReady(handleReplay);
-  }, [handleReplay, onReplayReady]);
+    onReplayReady(startReplay, stopReplay);
+  }, [startReplay, stopReplay, onReplayReady]);
+
+  // Clean up animation on unmount
+  useEffect(() => {
+    return () => {
+      if (animFrameRef.current !== null) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, []);
 
   const cursorStyle =
     tool === "eraser"
@@ -163,10 +206,10 @@ export function Canvas({
         width={CANVAS_WIDTH}
         height={CANVAS_HEIGHT}
         className={cn("w-full h-full", cursorStyle)}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp}
+        onPointerDown={isReplaying ? undefined : handlePointerDown}
+        onPointerMove={isReplaying ? undefined : handlePointerMove}
+        onPointerUp={isReplaying ? undefined : handlePointerUp}
+        onPointerLeave={isReplaying ? undefined : handlePointerUp}
         style={{ touchAction: "none" }}
       />
       {displaySize.width > 0 && (

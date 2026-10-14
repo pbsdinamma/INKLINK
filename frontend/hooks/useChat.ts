@@ -4,7 +4,11 @@ import { useEffect, useState, useCallback } from "react";
 import type { AppSocket } from "@/lib/socket";
 import type { ChatMessage } from "@/types";
 
-export function useChat(socket: AppSocket | null, initialMessages: ChatMessage[] = []) {
+export function useChat(
+  socket: AppSocket | null,
+  initialMessages: ChatMessage[] = [],
+  onNewMessage?: (msg: ChatMessage) => void
+) {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
 
   useEffect(() => {
@@ -16,10 +20,11 @@ export function useChat(socket: AppSocket | null, initialMessages: ChatMessage[]
     if (!socket) return;
     const handleMessage = (msg: ChatMessage) => {
       setMessages((prev) => [...prev.slice(-199), msg]);
+      onNewMessage?.(msg);
     };
     socket.on("chat:message", handleMessage);
     return () => { socket.off("chat:message", handleMessage); };
-  }, [socket]);
+  }, [socket, onNewMessage]);
 
   const sendMessage = useCallback(
     (message: string) => {
